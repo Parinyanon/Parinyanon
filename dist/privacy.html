@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#173f3a" />
+    <script src="js/core/page-boot.js"></script>
+    <title>การปกป้องข้อมูล · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="privacy"
+    ></script>
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="overview.html">จัดหนี้</a>
+      <div class="account-menu">
+        <span id="identity" class="small"></span
+        ><button id="logout" type="button" class="plain-button logout-button">ออกจากระบบ</button>
+      </div>
+    </header>
+    <main class="container privacy-page">
+      <p id="message" role="status"></p>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="เส้นทาง">
+          <a href="settings.html">ตั้งค่า</a><span aria-current="page">การปกป้องข้อมูล</span>
+        </nav>
+        <h1>การปกป้องข้อมูล</h1>
+        <section class="card">
+          <h2>ข้อความส่วนตัว</h2>
+          <p id="privacy-status" role="status">กำลังตรวจสถานะ…</p>
+          <p>
+            ชื่อหนี้ เจ้าหนี้ หมายเหตุการชำระ หมายเหตุอัตราดอกเบี้ย และเหตุผลย้อนรายการ จะเข้ารหัสบนเครื่องก่อนส่ง
+            ระบบยังเห็นยอดเงิน อัตราดอกเบี้ย วันที่ หมวดหมู่ และข้อมูลบัญชี เพื่อให้บริการได้
+          </p>
+          <p>
+            การค้นหาชื่อจะทำหลังถอดรหัสในเครื่อง จึงอาจช้าลงเมื่อมีรายการจำนวนมาก ไฟล์ CSV/JSON
+            ที่ดาวน์โหลดเป็นข้อความอ่านได้ ควรเก็บในที่ปลอดภัย
+          </p>
+          <div class="vault-actions">
+            <button id="privacy-change" type="button" class="action-button">
+              เปลี่ยนรหัสปลดล็อกด้วยรหัสกู้คืน</button
+            ><button id="privacy-lock" type="button" class="plain-button">ล็อกข้อมูลในแท็บนี้</button>
+          </div>
+        </section>
+        <section class="card">
+          <h2>ข้อมูลเดิมและข้อจำกัด</h2>
+          <p>
+            ย้ายชื่อหนี้ เจ้าหนี้ หมายเหตุ ประวัติการแก้ไข และแจ้งเตือนเก่าของบัญชีนี้
+            ข้อมูลจะเข้ารหัสในเครื่องแล้วแทนข้อความเดิมทีละรายการ หากหยุดกลางทางสามารถทำต่อได้
+            สำเนาสำรองและไฟล์ที่เคยดาวน์โหลดจะไม่เปลี่ยนตาม
+          </p>
+          <label class="vault-check"
+            ><input type="checkbox" id="privacy-migrate-confirm" />ฉันเก็บรหัสกู้คืนแล้ว
+            และเข้าใจว่าสำเนาสำรองเก่าอาจยังมีข้อความอ่านได้</label
+          >
+          <p>
+            <button id="privacy-migrate" type="button" class="action-button">
+              เข้ารหัสข้อมูลเดิมของฉัน
+            </button>
+          </p>
+          <p>
+            หากลืมทั้งรหัสปลดล็อกและรหัสกู้คืน จะกู้ข้อความที่เข้ารหัสไม่ได้ การรีเซ็ตรหัสเข้าบัญชีไม่สามารถถอดรหัสให้แทนได้
+          </p>
+          <p>ขณะปลดล็อก เบราว์เซอร์ต้องอ่านข้อมูลได้ การเข้ารหัสไม่ป้องกันส่วนขยายอันตรายหรือสคริปต์ที่ยึดหน้าเว็บได้</p>
+        </section>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · บันทึกหนี้ส่วนบุคคล</footer>
+  </body>
+</html>

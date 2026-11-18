@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <script src="js/core/page-boot.js"></script>
+    <title>เพิ่มหนี้ · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="debts"
+    ></script>
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#173f3a" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon" aria-hidden="true">฿</span> จัดหนี้</a
+      >
+      <div class="account-menu">
+        <span id="identity" class="small"> </span>
+        <button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <section class="page-heading">
+          <div>
+            <h1>เพิ่มหนี้</h1>
+          </div>
+        </section>
+        <nav class="task-nav" aria-label="เมนูหลัก">
+          <a href="index.html">รายการหนี้</a>
+          <a href="create-debt.html" aria-current="page">เพิ่มหนี้</a>
+        </nav>
+        <div class="form-page">
+          <section class="card" aria-labelledby="create-title">
+            <div class="wizard-progress" aria-label="ขั้นตอนเพิ่มหนี้">
+              <span data-step-indicator aria-current="step">1. ข้อมูลหนี้</span
+              ><span data-step-indicator>2. ดอกเบี้ย</span
+              ><span data-step-indicator>3. ตรวจแล้วบันทึก</span>
+            </div>
+            <form id="create-debt" data-wizard>
+              <fieldset id="debt-fields" disabled>
+                <section class="wizard-step" data-wizard-step>
+                  <h2 id="create-title">ข้อมูลหนี้</h2>
+                  <label for="principal">เงินต้นที่เป็นหนี้อยู่</label>
+                  <div class="amount-entry">
+                    <span class="amount-currency" aria-hidden="true">฿</span
+                    ><input
+                      id="principal"
+                      name="principal"
+                      class="money-input"
+                      type="text"
+                      inputmode="decimal"
+                      pattern="[0-9]+([.][0-9]{1,2})?"
+                      maxlength="15"
+                      placeholder="เช่น 10000.00"
+                      required
+                      aria-describedby="principal-unit principal-hint"
+                    /><span class="amount-unit" id="principal-unit">บาท</span>
+                  </div>
+                  <p id="principal-hint" class="hint">
+                    พิมพ์ยอดเงินโดยไม่ใส่จุลภาค เช่น 10000 หรือ 10000.50<br />ใส่เฉพาะเงินต้น
+                    ส่วนดอกเบี้ยค้างกรอกในขั้นถัดไป
+                  </p>
+                  <label for="title">ชื่อหนี้</label
+                  ><input
+                    id="title"
+                    name="title"
+                    maxlength="150"
+                    placeholder="เช่น บัตรเครดิต / เงินยืมคุณแม่"
+                    required
+                  />
+                  <label for="category">ประเภทหนี้</label
+                  ><select id="category" name="category" required>
+                    <option value="">เลือกประเภทหนี้</option>
+                  </select>
+                </section>
+                <section class="wizard-step" data-wizard-step hidden>
+                  <h2>หนี้นี้คิดดอกเบี้ยไหม?</h2>
+                  <p>เลือกตามเงื่อนไขที่ตกลงกับเจ้าหนี้</p>
+                  <div class="choice-grid">
+                    <button
+                      class="choice-card"
+                      type="button"
+                      data-interest-choice="none"
+                      aria-pressed="true"
+                    >
+                      <strong>ไม่คิดดอก</strong><span>ยืมเท่าไร คืนเงินต้นเท่านั้น</span></button
+                    ><button
+                      class="choice-card"
+                      type="button"
+                      data-interest-choice="simple_daily"
+                      aria-pressed="false"
+                    >
+                      <strong>คิดดอกเบี้ย</strong><span>คิดจากเงินต้นที่ยังเหลือ</span>
+                    </button>
+                  </div>
+                  <select
+                    id="interest-method"
+                    name="interest_method"
+                    hidden
+                    aria-label="วิธีคิดดอกเบี้ย"
+                  >
+                    <option value="none">ไม่คิดดอก</option>
+                    <option value="simple_daily">คิดดอกเบี้ย</option>
+                  </select>
+                  <fieldset id="interest-fields" hidden disabled>
+                    <label for="initial-rate">เจ้าหนี้คิดดอกเท่าไร?</label>
+                    <div class="interest-inline">
+                      <input
+                        id="initial-rate"
+                        name="rate_percent"
+                        class="money-input"
+                        type="text"
+                        inputmode="decimal"
+                        pattern="[0-9]+([.][0-9]{1,6})?"
+                        maxlength="11"
+                        value="0"
+                        aria-describedby="interest-hint"
+                      /><select id="initial-period" name="rate_period" aria-label="ดอกเบี้ยต่อช่วงเวลา">
+                        <option value="year">% ต่อปี</option>
+                        <option value="month">% ต่อเดือน</option>
+                        <option value="day">% ต่อวัน</option>
+                      </select>
+                    </div>
+                    <p id="interest-hint" class="hint">ถ้าสัญญาระบุ “15% ต่อปี” ให้ใส่ 15 แล้วเลือก % ต่อปี</p>
+                    <div id="interest-example" class="interest-preview">
+                      <h3 data-example-title>ตัวอย่างดอกเบี้ย</h3>
+                      <div class="estimate-grid">
+                        <div><span>1 วัน ประมาณ</span><strong data-estimate="day">—</strong></div>
+                        <div><span>30 วัน ประมาณ</span><strong data-estimate="month">—</strong></div>
+                        <div><span>365 วัน ประมาณ</span><strong data-estimate="year">—</strong></div>
+                      </div>
+                      <p class="hint">
+                        ตัวอย่างกรณีเงินต้นคงเดิม ไม่มีการจ่ายหรือเปลี่ยนอัตรา ยอดจริงระบบจะคำนวณให้อีกครั้ง
+                      </p>
+                    </div>
+                    <p class="hint">
+                      คิดจากเงินต้นที่เหลือ ไม่เอาดอกเบี้ยมาคิดดอกซ้ำ รองรับดอกเบี้ยอย่างง่ายเท่านั้น หากเงื่อนไขเป็น Flat
+                      rate หรือดอกทบต้น ต้องตรวจสูตรก่อนใช้
+                    </p>
+                  </fieldset>
+                  <details>
+                    <summary>มีดอกเบี้ยเก่าค้างอยู่แล้ว</summary>
+                    <label for="opening-interest">ดอกเบี้ยค้างก่อนเริ่มบันทึก (บาท)</label
+                    ><input
+                      id="opening-interest"
+                      name="opening_interest"
+                      type="text"
+                      inputmode="decimal"
+                      pattern="[0-9]+([.][0-9]{1,2})?"
+                      maxlength="15"
+                      value="0"
+                      required
+                    />
+                    <p class="hint">ไม่มีให้คงไว้ที่ 0 ช่องนี้ไม่ใช่อัตราดอกเบี้ย</p>
+                  </details>
+                </section>
+                <section class="wizard-step" data-wizard-step hidden>
+                  <h2>ตรวจอีกนิด แล้วบันทึกได้เลย</h2>
+                  <p>ระบบจะเก็บข้อมูลนี้เป็นจุดเริ่มต้นของหนี้</p>
+                  <dl class="review-list">
+                    <dt>ชื่อหนี้</dt>
+                    <dd data-review="title">—</dd>
+                    <dt>เงินต้น</dt>
+                    <dd data-review="principal">—</dd>
+                    <dt>ดอกเบี้ย</dt>
+                    <dd data-review="interest">—</dd>
+                  </dl>
+                  <label for="opening-date">เริ่มนับข้อมูลจากวันที่</label
+                  ><input id="opening-date" name="opening_date" type="date" required />
+                  <p class="hint">เลือกวันนี้ได้ หากยอดที่กรอกเป็นยอดคงเหลือ ณ วันนี้</p>
+                  <details>
+                    <summary>เพิ่มเจ้าหนี้ วันครบกำหนด หรือหมายเหตุ</summary>
+                    <label for="creditor">ชื่อเจ้าหนี้</label
+                    ><input
+                      id="creditor"
+                      name="creditor"
+                      maxlength="150"
+                      placeholder="ไม่บังคับ"
+                    /><label for="due-on">วันครบกำหนดชำระ</label
+                    ><input id="due-on" name="due_on" type="date" /><label for="note">หมายเหตุ</label
+                    ><textarea id="note" name="note" rows="2" maxlength="2000"></textarea>
+                  </details>
+                </section>
+              </fieldset>
+              <div class="action-bar">
+                <span class="action-caption" id="wizard-caption">ขั้นที่ 1 จาก 3</span
+                ><button id="wizard-back" class="plain-button" type="button" hidden>ย้อนกลับ</button
+                ><button id="wizard-next" class="primary" type="button" disabled>ถัดไป →</button
+                ><button id="save-debt" class="primary" type="submit" disabled hidden>
+                  ยืนยันบันทึกหนี้
+                </button>
+              </div>
+              <button id="edit-draft" class="plain-button edit-draft" type="button" hidden>
+                แก้ไขข้อมูลก่อนส่งใหม่
+              </button>
+            </form>
+            <div id="create-status" role="status" aria-live="polite"></div>
+          </section>
+          <p>
+            <a href="index.html">← กลับรายการหนี้</a>
+          </p>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · ระบบบันทึกหนี้ส่วนบุคคล</footer>
+    <noscript>กรุณาเปิด JavaScript เพื่อใช้ระบบ</noscript>
+  </body>
+</html>

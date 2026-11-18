@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <script src="js/core/page-boot.js"></script>
+    <title>อัตราดอกเบี้ย · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="debt-detail"
+    ></script>
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#173f3a" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon" aria-hidden="true">฿</span> จัดหนี้</a
+      >
+      <div class="account-menu">
+        <span id="identity" class="small"> </span>
+        <button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="ตำแหน่งหน้า">
+          <a href="index.html">รายการหนี้</a>
+          <span aria-hidden="true">/</span>
+          <a href="index.html" data-debt-page="debt-detail">กลับสรุปหนี้</a>
+          <span aria-hidden="true">/</span>
+          <span>อัตราดอกเบี้ย</span>
+        </nav>
+        <section class="page-heading">
+          <div>
+            <p id="debt-title" class="eyebrow">กำลังโหลดข้อมูลหนี้…</p>
+            <h1>อัตราดอกเบี้ย</h1>
+          </div>
+          <button id="refresh-detail" class="plain-button" type="button">โหลดข้อมูลใหม่</button>
+        </section>
+        <nav class="task-nav" aria-label="เมนูของหนี้รายการนี้">
+          <a href="index.html" data-debt-page="debt-detail">สรุปหนี้</a>
+          <a href="index.html" data-debt-page="payment">ชำระ</a>
+          <a href="index.html" data-debt-page="history">ประวัติ</a>
+          <a href="index.html" data-debt-page="rates">ดอกเบี้ย</a>
+          <a href="index.html" data-debt-page="schedules">งวดชำระ</a>
+        </nav>
+        <div id="detail-status" class="notice" role="status" aria-live="polite"></div>
+        <section class="context-summary">
+          <span>อัตราที่ใช้อยู่</span>
+          <strong id="current-rate">—</strong>
+        </section>
+        <div class="debt-layout detail-forms">
+          <section class="card" aria-labelledby="rate-title">
+            <h2 id="rate-title">เปลี่ยนอัตราดอกเบี้ย</h2>
+            <p id="rate-eligibility" class="subtitle">กำลังโหลดเงื่อนไข…</p>
+            <form id="rate-form">
+              <fieldset id="rate-fields" disabled>
+                <label for="new-rate">เจ้าหนี้คิดดอกใหม่เท่าไร?</label>
+                <input
+                  id="new-rate"
+                  name="rate_percent"
+                  type="text"
+                  inputmode="decimal"
+                  pattern="[0-9]+([.][0-9]{1,6})?"
+                  maxlength="11"
+                  placeholder="เช่น 10"
+                  required
+                />
+                <label for="new-period">คาบของอัตราใหม่</label>
+                <select id="new-period" name="rate_period">
+                  <option value="year">% ต่อปี</option>
+                  <option value="month">% ต่อเดือน</option>
+                  <option value="day">% ต่อวัน</option>
+                </select>
+                <div id="interest-example" class="interest-preview" hidden>
+                  <h3 data-example-title>ตัวอย่างเมื่อเงินต้น 10,000 บาท</h3>
+                  <div class="estimate-grid">
+                    <div><span>1 วัน ประมาณ</span><strong data-estimate="day">—</strong></div>
+                    <div><span>30 วัน ประมาณ</span><strong data-estimate="month">—</strong></div>
+                    <div><span>365 วัน ประมาณ</span><strong data-estimate="year">—</strong></div>
+                  </div>
+                  <p class="hint">ตัวอย่างเมื่อเงินต้นคงเดิม ไม่ใช่ยอดยืนยัน ดอกเก่าก่อนวันที่มีผลยังคงใช้อัตราเดิม</p>
+                </div>
+                <label for="rate-date">วันที่เริ่มใช้อัตราใหม่</label>
+                <input
+                  id="rate-date"
+                  name="effective_on"
+                  type="date"
+                  required
+                  aria-describedby="rate-date-hint"
+                />
+                <p id="rate-date-hint" class="hint"></p>
+                <label for="rate-note">หมายเหตุ (ไม่บังคับ)</label>
+                <textarea id="rate-note" name="note" rows="2" maxlength="2000"></textarea>
+              </fieldset>
+              <p class="hint">
+                กรอก 15 หมายถึง 15% ของคาบที่เลือก ตั้งเป็น 0% ได้ ระบบแยกคำนวณตามช่วงวันที่
+                วันที่เดียวกันบันทึกอัตราได้หนึ่งรายการ และยังแก้หรือลบอัตราที่บันทึกแล้วจากหน้านี้ไม่ได้
+              </p>
+              <button id="change-rate" class="primary" type="submit" disabled>บันทึกอัตราใหม่</button>
+            </form>
+          </section>
+          <section class="card" aria-labelledby="rates-title">
+            <h2 id="rates-title">ประวัติอัตราดอกเบี้ย</h2>
+            <p id="initial-rate-summary" class="small"></p>
+            <div id="rates-status" class="notice" role="status" aria-live="polite"></div>
+            <ul id="rates-history" class="debt-list"></ul>
+            <button id="more-rates" class="plain-button" type="button" hidden>
+              แสดงอัตราก่อนหน้า
+            </button>
+          </section>
+        </div>
+        <div id="mutation-status" class="notice" role="status" aria-live="polite"></div>
+        <button id="edit-mutation" class="plain-button" type="button" hidden>
+          แก้ไขข้อมูลก่อนส่งใหม่
+        </button>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · ระบบบันทึกหนี้ส่วนบุคคล</footer>
+    <noscript>กรุณาเปิด JavaScript เพื่อใช้ระบบ</noscript>
+  </body>
+</html>

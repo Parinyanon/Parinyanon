@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#173f3a" />
+    <script src="js/core/page-boot.js"></script>
+    <title>งวดชำระทั้งหมด · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="installments"
+    ></script>
+  </head>
+  <body data-page="dashboard" data-workspace="installments">
+    <header class="topbar">
+      <a class="brand" href="overview.html"><span class="brand-icon">฿</span> จัดหนี้</a>
+      <div class="account-menu">
+        <span id="identity" class="small"></span
+        ><button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <p id="message" role="status"></p>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="เส้นทาง">
+          <a href="overview.html">ภาพรวม</a><span aria-current="page">งวดชำระทั้งหมด</span>
+        </nav>
+        <section class="page-heading">
+          <div>
+            <h1>งวดชำระทั้งหมด</h1>
+            <p class="small">งวดที่ยังชำระไม่ครบ เรียงจากวันครบกำหนดก่อน</p>
+          </div>
+          <button
+            id="installments-refresh"
+            type="button"
+            class="icon-button refresh-button"
+            aria-label="อัปเดตข้อมูล"
+            title="อัปเดตข้อมูล"
+          >
+            <svg
+              class="ui-icon"
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 7v5h-5M4 17v-5h5M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
+            </svg>
+          </button>
+        </section>
+        <p id="installments-status" role="status" aria-live="polite"></p>
+        <div id="installments-list" aria-live="polite"></div>
+        <nav class="installments-pagination" aria-label="หน้ารายการงวด">
+          <button id="installments-prev" class="plain-button" type="button">หน้าก่อน</button
+          ><span id="installments-page"></span
+          ><button id="installments-next" class="plain-button" type="button">หน้าถัดไป</button>
+        </nav>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · บันทึกหนี้ส่วนบุคคล</footer>
+  </body>
+</html>

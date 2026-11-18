@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <script src="js/core/page-boot.js"></script>
+    <title>รายการหนี้ · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="debts"
+    ></script>
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#173f3a" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon" aria-hidden="true">฿</span> จัดหนี้</a
+      >
+      <div class="account-menu">
+        <span id="identity" class="small"> </span>
+        <button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <section class="page-heading">
+          <div>
+            <h1>รายการหนี้</h1>
+          </div>
+        </section>
+        <nav class="task-nav" aria-label="เมนูหลัก">
+          <a href="index.html" aria-current="page">รายการหนี้</a>
+          <a href="create-debt.html">เพิ่มหนี้</a>
+        </nav>
+        <div class="page-actions">
+          <p class="small">เลือกหนี้เพื่อดูยอดและจัดการรายการ</p>
+          <a href="create-debt.html" class="action-button">+ เพิ่มหนี้</a>
+        </div>
+        <section class="card list-panel" aria-labelledby="list-title">
+          <div class="panel-heading">
+            <h2 id="list-title">หนี้ของคุณ</h2>
+            <button
+              class="icon-button refresh-button"
+              id="refresh"
+              type="button"
+              aria-label="อัปเดตรายการหนี้"
+              title="อัปเดตรายการหนี้"
+            >
+              <svg
+                class="ui-icon"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M20 7v5h-5M4 17v-5h5" />
+                <path d="M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
+              </svg>
+            </button>
+          </div>
+          <form id="filters" class="filters" role="search">
+            <div>
+              <label for="search">ค้นหาหนี้</label>
+              <input
+                id="search"
+                name="search"
+                type="search"
+                placeholder="พิมพ์คำค้น"
+                maxlength="150"
+              />
+            </div>
+            <div>
+              <label for="category-filter">หมวดหมู่</label>
+              <select id="category-filter" name="category">
+                <option value="">ทุกหมวด</option>
+              </select>
+            </div>
+            <div>
+              <label for="archived">รายการ</label>
+              <select id="archived" name="archived">
+                <option value="false">ที่ยังไม่ซ่อน</option>
+                <option value="true">ที่ซ่อนไว้</option>
+              </select>
+            </div>
+            <button class="plain-button filter-button" type="submit">ค้นหา</button>
+          </form>
+          <p class="small">รายการที่ซ่อนไว้ยังเป็นหนี้อยู่ การซ่อนไม่ใช่การยกหนี้</p>
+          <div id="list-status" role="status" aria-live="polite"></div>
+          <ul id="debt-list" class="debt-list"></ul>
+          <button class="plain-button" id="load-more" type="button" hidden>แสดงเพิ่มเติม</button>
+        </section>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · ระบบบันทึกหนี้ส่วนบุคคล</footer>
+    <noscript>กรุณาเปิด JavaScript เพื่อใช้ระบบ</noscript>
+  </body>
+</html>

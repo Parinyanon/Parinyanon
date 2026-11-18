@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <script src="js/core/page-boot.js"></script>
+    <title>สรุปหนี้ · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="debt-detail"
+    ></script>
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#173f3a" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon" aria-hidden="true">฿</span> จัดหนี้</a
+      >
+      <div class="account-menu">
+        <span id="identity" class="small"> </span>
+        <button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="ตำแหน่งหน้า">
+          <a href="index.html">รายการหนี้</a>
+          <span aria-hidden="true">/</span>
+          <span>สรุปหนี้</span>
+        </nav>
+        <section class="page-heading">
+          <div>
+            <p id="debt-title" class="eyebrow">กำลังโหลดข้อมูลหนี้…</p>
+            <h1>สรุปหนี้</h1>
+          </div>
+          <button id="refresh-detail" class="plain-button" type="button">โหลดข้อมูลใหม่</button>
+        </section>
+        <nav class="task-nav" aria-label="เมนูของหนี้รายการนี้">
+          <a href="index.html" data-debt-page="debt-detail">สรุปหนี้</a>
+          <a href="index.html" data-debt-page="payment">ชำระ</a>
+          <a href="index.html" data-debt-page="history">ประวัติ</a>
+          <a href="index.html" data-debt-page="rates">ดอกเบี้ย</a>
+          <a href="index.html" data-debt-page="schedules">งวดชำระ</a>
+        </nav>
+        <div id="detail-status" class="notice" role="status" aria-live="polite"></div>
+
+        <section class="card balance-panel" aria-labelledby="balance-title">
+          <div class="balance-heading">
+            <h2 id="balance-title">ยอดคงเหลือวันนี้</h2>
+            <a
+              id="detail-payment-action"
+              class="action-button"
+              data-debt-page="payment"
+              href="index.html"
+              hidden
+              >บันทึกชำระ</a
+            >
+          </div>
+          <p id="balance-date" class="small"></p>
+          <p class="balance-total" id="total-due">—</p>
+          <dl class="balance-breakdown">
+            <div>
+              <dt>เงินต้น</dt>
+              <dd id="principal-balance">—</dd>
+            </div>
+            <div>
+              <dt>ดอกเบี้ยประมาณการ</dt>
+              <dd id="interest-balance">—</dd>
+            </div>
+            <div>
+              <dt>ค่าธรรมเนียม</dt>
+              <dd id="fee-balance">—</dd>
+            </div>
+            <div>
+              <dt>ภาษี</dt>
+              <dd id="tax-balance">—</dd>
+            </div>
+          </dl>
+          <p class="small">ยอดจากระบบ ดอกเบี้ยแสดงทศนิยม 2 ตำแหน่ง และระบบจะปัดตามกติกาเมื่อบันทึกชำระ</p>
+        </section>
+        <details class="debt-information">
+          <summary>ข้อมูลหนี้และอัตราดอกเบี้ย</summary>
+          <p id="debt-meta" class="small"></p>
+          <p id="debt-note" class="small user-note"></p>
+          <p id="current-rate" class="small"></p>
+        </details>
+        <div class="mini-actions">
+          <a class="plain-button" data-debt-page="edit-debt" href="index.html">แก้ไขข้อมูลหนี้</a
+          ><a class="plain-button" data-debt-page="charges" href="index.html">+ ค่าธรรมเนียม / ภาษี</a>
+        </div>
+        <div class="action-grid summary-actions">
+          <a class="action-card" href="index.html" data-debt-page="history">
+            <h2>ประวัติรายการ<span aria-hidden="true">→</span></h2>
+            <p>ตรวจรายการย้อนหลัง หรือย้อนรายการที่กรอกผิด</p>
+          </a>
+          <a class="action-card" href="index.html" data-debt-page="rates">
+            <h2>อัตราดอกเบี้ย<span aria-hidden="true">→</span></h2>
+            <p>ดูและเปลี่ยนอัตราตามวันที่มีผล</p>
+          </a>
+          <a class="action-card" href="index.html" data-debt-page="schedules">
+            <h2>งวดชำระ<span aria-hidden="true">→</span></h2>
+            <p>ดูงวดค้าง สร้างแผน และจัดสรรยอดชำระ</p>
+          </a>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · ระบบบันทึกหนี้ส่วนบุคคล</footer>
+    <noscript>กรุณาเปิด JavaScript เพื่อใช้ระบบ</noscript>
+  </body>
+</html>

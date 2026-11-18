@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#173f3a" />
+    <script src="js/core/page-boot.js"></script>
+    <title>ภาพรวมหนี้ · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="workspace"
+    ></script>
+  </head>
+  <body data-page="dashboard" data-workspace="overview">
+    <header class="topbar">
+      <a class="brand" href="overview.html"><span class="brand-icon">฿</span> จัดหนี้</a>
+      <div class="account-menu">
+        <span id="identity" class="small"></span
+        ><button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <section class="page-heading">
+          <div><h1>ภาพรวมหนี้</h1></div>
+          <div class="heading-actions">
+            <button
+              class="icon-button refresh-button"
+              id="workspace-refresh"
+              type="button"
+              aria-label="อัปเดตข้อมูล"
+              title="อัปเดตข้อมูล"
+            >
+              <svg
+                class="ui-icon"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M20 7v5h-5M4 17v-5h5" />
+                <path d="M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
+              </svg></button
+            ><button
+              type="button"
+              id="install-compact"
+              class="plain-button install-compact"
+              data-install-app
+              hidden
+            >
+              ติดตั้ง</button
+            ><a class="action-button" href="create-debt.html">+ เพิ่มหนี้</a>
+          </div>
+        </section>
+        <aside id="install-banner" class="install-promo" aria-label="ติดตั้งจัดหนี้บนเครื่อง" hidden>
+          <img src="assets/app-icon.svg" alt="" width="40" height="40" />
+          <div class="install-promo-copy">
+            <strong>เปิดจัดหนี้ได้จากหน้าจอหลัก</strong>
+            <p>เพิ่มไอคอนไว้บนเครื่อง เพื่อกลับมาดูหนี้ได้สะดวก</p>
+          </div>
+          <div class="install-promo-actions">
+            <button type="button" class="action-button" data-install-app>ติดตั้งแอป</button
+            ><button type="button" class="plain-button" id="install-later">ไว้ทีหลัง</button>
+          </div>
+        </aside>
+        <div id="workspace-status" class="notice" role="status" aria-live="polite"></div>
+        <section class="overview-summary" aria-label="ยอดหนี้และกำหนดชำระ">
+          <div class="overview-total-block">
+            <div class="overview-total-heading">
+              <h2>ยอดหนี้คงเหลือทั้งหมด</h2>
+              <a class="overview-panel-link overview-all-debts" href="index.html">ดูทั้งหมด →</a>
+            </div>
+            <strong id="overview-total" class="overview-balance">—</strong>
+            <p id="overview-asof" class="small">กำลังโหลดยอดหนี้…</p>
+          </div>
+          <div class="overview-due-block">
+            <h2 id="priority-heading">กำหนดชำระ</h2>
+            <div id="overview-overdue" class="overview-overdue" hidden>
+              <span id="overview-overdue-label"></span><strong id="overview-overdue-total"></strong>
+            </div>
+            <div id="priority-content" aria-live="polite">
+              <p class="small">กำลังโหลดกำหนดชำระ…</p>
+            </div>
+          </div>
+          <div id="overview-month" class="overview-month" hidden>
+            <span>ยอดงวดที่ยังต้องจ่ายเดือนนี้</span
+            ><span id="overview-month-name" class="overview-month-name"></span>
+            <strong id="overview-month-total">—</strong>
+            <p>รวมเฉพาะงวดตามแผน หนี้ที่ยังไม่มีแผนงวดยังไม่รวมในยอดนี้</p>
+          </div>
+        </section>
+        <div class="overview-details">
+          <section
+            id="overview-schedule-panel"
+            class="overview-schedule-panel"
+            aria-labelledby="schedule-heading"
+            hidden
+          >
+            <div class="panel-heading"><h2 id="schedule-heading">งวดชำระอื่น</h2></div>
+            <p id="overview-schedule-note" class="small">เรียงตามวันครบกำหนด งวดเลยกำหนดอยู่ก่อน</p>
+            <div id="upcoming-installments" aria-live="polite"></div>
+          </section>
+          <section
+            id="overview-debts-panel"
+            class="overview-debts-panel"
+            aria-labelledby="overview-debts-heading"
+          >
+            <div class="panel-heading">
+              <h2 id="overview-debts-heading">หนี้ของคุณ</h2>
+              <a href="index.html" class="overview-section-link" aria-label="ดูรายการหนี้ทั้งหมด"
+                >ดูทั้งหมด →</a
+              >
+            </div>
+            <p class="small">แสดงสูงสุด 4 รายการที่ยังไม่ซ่อน</p>
+            <div id="overview-debts" aria-live="polite"><p class="small">กำลังโหลดรายการหนี้…</p></div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · บันทึกหนี้ส่วนบุคคล</footer>
+  </body>
+</html>

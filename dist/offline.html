@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="th" data-offline-fallback>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#173f3a" />
+    <script src="js/core/page-boot.js"></script>
+    <title>เชื่อมต่อแอปอีกครั้ง · จัดหนี้</title>
+    <script type="module" src="js/core/recovery.js"></script>
+    <style>
+      /* Keep recovery usable when external styles cannot be fetched. */
+      .offline-page {
+        margin: 0;
+        padding: 24px;
+        font-family: Tahoma, sans-serif;
+        min-height: 100svh;
+        box-sizing: border-box;
+        display: grid;
+        place-items: center;
+        background: #f5f5ef;
+        color: #263733;
+      }
+      .offline-card {
+        max-width: 480px;
+        margin: auto;
+        padding: 24px;
+        width: 100%;
+        box-sizing: border-box;
+        background: #fff;
+        border: 1px solid #dce3db;
+        border-radius: 20px;
+      }
+      .offline-retry {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 50px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        background: #25685d;
+        color: #fff;
+        font: inherit;
+        text-decoration: none;
+      }
+    </style>
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body class="offline-page">
+    <main class="offline-card" aria-labelledby="offline-title">
+      <p class="offline-brand">จัดหนี้</p>
+      <div class="offline-symbol" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          width="28"
+          height="28"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M2 8.5a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0M8.5 15.5a5.5 5.5 0 0 1 7 0M12 19h.01M3 3l18 18"
+          />
+        </svg>
+      </div>
+      <h1 id="offline-title">ยังเชื่อมต่อจัดหนี้ไม่ได้</h1>
+      <p class="offline-description">
+        การเชื่อมต่ออาจขัดข้องชั่วคราว ลองตรวจ Wi-Fi หรืออินเทอร์เน็ตมือถือ แล้วกด “ลองอีกครั้ง” เพื่อกลับไปใช้งานต่อ
+      </p>
+      <a class="offline-retry" href="overview.html">
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 7v5h-5M4 17v-5h5M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
+        </svg>
+        <span>ลองอีกครั้ง</span>
+      </a>
+      <p id="recovery-status" role="status" aria-live="polite"></p>
+      <p class="offline-hint">เมื่อกลับมาออนไลน์ ระบบจะลองเชื่อมต่อให้อัตโนมัติ และอัปเดตยอดหนี้ล่าสุดให้คุณ</p>
+    </main>
+  </body>
+</html>

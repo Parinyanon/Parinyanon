@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <script src="js/core/page-boot.js"></script>
+    <title>ย้อนรายการล่าสุด · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="debt-detail"
+    ></script>
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#173f3a" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon" aria-hidden="true">฿</span> จัดหนี้</a
+      >
+      <div class="account-menu">
+        <span id="identity" class="small"> </span>
+        <button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="ตำแหน่งหน้า">
+          <a href="index.html">รายการหนี้</a>
+          <span aria-hidden="true">/</span>
+          <a href="index.html" data-debt-page="history">กลับประวัติรายการ</a>
+          <span aria-hidden="true">/</span>
+          <span>ย้อนรายการล่าสุด</span>
+        </nav>
+        <section class="page-heading">
+          <div>
+            <p id="debt-title" class="eyebrow">กำลังโหลดข้อมูลหนี้…</p>
+            <h1>ย้อนรายการล่าสุด</h1>
+          </div>
+          <button id="refresh-detail" class="plain-button" type="button">โหลดข้อมูลใหม่</button>
+        </section>
+        <nav class="task-nav" aria-label="เมนูของหนี้รายการนี้">
+          <a href="index.html" data-debt-page="debt-detail">สรุปหนี้</a>
+          <a href="index.html" data-debt-page="payment">ชำระ</a>
+          <a href="index.html" data-debt-page="history">ประวัติ</a>
+          <a href="index.html" data-debt-page="rates">ดอกเบี้ย</a>
+          <a href="index.html" data-debt-page="schedules">งวดชำระ</a>
+        </nav>
+        <div id="detail-status" class="notice" role="status" aria-live="polite"></div>
+        <section class="context-summary">
+          <span>ยอดหนี้คงเหลือวันนี้</span>
+          <strong id="total-due">—</strong>
+        </section>
+        <div class="form-page">
+          <section class="card" aria-labelledby="void-title">
+            <h2 id="void-title">ย้อนรายการล่าสุด</h2>
+            <p class="subtitle">สำหรับแก้รายการที่กรอกผิด ระบบจะคืนยอดก่อนรายการนั้น</p>
+            <p id="latest-event">กำลังโหลดรายการล่าสุด…</p>
+            <form id="void-form">
+              <fieldset id="void-fields" disabled>
+                <label for="void-reason">เหตุผลที่ย้อนรายการ</label>
+                <textarea
+                  id="void-reason"
+                  name="reason"
+                  rows="3"
+                  maxlength="500"
+                  required
+                ></textarea>
+              </fieldset>
+              <button id="void-event" class="primary danger-button" type="submit" disabled>
+                ยืนยันย้อนรายการล่าสุด
+              </button>
+            </form>
+            <p class="hint">ย้อนเฉพาะรายการล่าสุดที่ยังไม่ถูกย้อน ส่วนรายการเก่ายังคงอยู่ในประวัติ</p>
+          </section>
+          <div id="mutation-status" class="notice" role="status" aria-live="polite"></div>
+          <button id="edit-mutation" class="plain-button" type="button" hidden>
+            แก้ไขข้อมูลก่อนส่งใหม่
+          </button>
+          <div class="page-actions">
+            <a data-debt-page="history" href="index.html">ดูประวัติรายการ →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · ระบบบันทึกหนี้ส่วนบุคคล</footer>
+    <noscript>กรุณาเปิด JavaScript เพื่อใช้ระบบ</noscript>
+  </body>
+</html>

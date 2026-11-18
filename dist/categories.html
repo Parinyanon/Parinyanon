@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#173f3a" />
+    <script src="js/core/page-boot.js"></script>
+    <title>ประเภทหนี้ของคุณ · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="workspace"
+    ></script>
+  </head>
+  <body data-page="dashboard" data-workspace="categories">
+    <header class="topbar">
+      <a class="brand" href="overview.html"><span class="brand-icon">฿</span> จัดหนี้</a>
+      <div class="account-menu">
+        <span id="identity" class="small"></span
+        ><button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <section class="page-heading">
+          <div>
+            <h1>ประเภทหนี้ของคุณ</h1>
+            <p class="small">ตั้งประเภทของคุณเอง แล้วนำไปเลือกตอนเพิ่มหนี้ได้เลย</p>
+          </div>
+          <button
+            class="icon-button refresh-button"
+            id="workspace-refresh"
+            type="button"
+            aria-label="อัปเดตข้อมูล"
+            title="อัปเดตข้อมูล"
+          >
+            <svg
+              class="ui-icon"
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M20 7v5h-5M4 17v-5h5" />
+              <path d="M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
+            </svg>
+          </button>
+        </section>
+        <div class="form-page">
+          <section class="card">
+            <h2>เพิ่มประเภทหนี้ของคุณ</h2>
+            <p class="small">เช่น ค่าเรียน ธุรกิจ หรือค่ารักษาพยาบาล</p>
+            <form id="category-form">
+              <label for="category-name">ชื่อประเภทหนี้</label>
+              <div class="category-add-row">
+                <input
+                  id="category-name"
+                  name="name"
+                  maxlength="80"
+                  required
+                  placeholder="พิมพ์ชื่อประเภท เช่น ค่าเรียน"
+                  aria-describedby="category-name-hint"
+                /><button
+                  id="add-category"
+                  class="primary"
+                  type="submit"
+                  data-inline-action
+                  disabled
+                >
+                  <span aria-hidden="true">＋</span><span id="category-add-label">เพิ่มประเภทหนี้</span>
+                </button>
+              </div>
+              <p id="category-name-hint" class="hint">
+                ตั้งชื่อได้ไม่เกิน 80 ตัวอักษร ประเภทส่วนตัวนี้ใช้ได้เฉพาะบัญชีคุณ
+              </p>
+            </form>
+            <div id="workspace-status" class="notice" role="status" aria-live="polite"></div>
+          </section>
+          <section class="card">
+            <div class="panel-heading">
+              <h2>ประเภทที่เลือกใช้ได้</h2>
+              <a class="section-link" href="create-debt.html"
+                >ไปเพิ่มหนี้ <span aria-hidden="true">→</span></a
+              >
+            </div>
+            <div id="category-list"></div>
+            <p class="hint">ประเภทกลางใช้ร่วมกันและแก้ไม่ได้ การซ่อนประเภทส่วนตัวไม่ลบหนี้ที่เคยใช้ประเภทนั้น</p>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · บันทึกหนี้ส่วนบุคคล</footer>
+  </body>
+</html>

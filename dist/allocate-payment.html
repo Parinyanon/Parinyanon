@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <script src="js/core/page-boot.js"></script>
+    <title>ผูกยอดชำระกับงวด · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="schedules"
+    ></script>
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#173f3a" />
+  </head>
+  <body data-page="dashboard">
+    <header class="topbar">
+      <a class="brand" href="index.html">
+        <span class="brand-icon" aria-hidden="true">฿</span> จัดหนี้</a
+      >
+      <div class="account-menu">
+        <span id="identity" class="small"> </span>
+        <button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="ตำแหน่งหน้า">
+          <a href="index.html">รายการหนี้</a>
+          <span aria-hidden="true">/</span>
+          <a href="index.html" data-debt-page="schedules">กลับตารางงวด</a>
+          <span aria-hidden="true">/</span>
+          <span>ผูกยอดชำระกับงวด</span>
+        </nav>
+        <section class="page-heading">
+          <div>
+            <p id="debt-title" class="eyebrow">กำลังโหลดข้อมูลหนี้…</p>
+            <h1>ผูกยอดชำระกับงวด</h1>
+          </div>
+          <button id="refresh-schedules" class="plain-button" type="button">โหลดข้อมูลใหม่</button>
+        </section>
+        <nav class="task-nav" aria-label="เมนูของหนี้รายการนี้">
+          <a href="index.html" data-debt-page="debt-detail">สรุปหนี้</a>
+          <a href="index.html" data-debt-page="payment">ชำระ</a>
+          <a href="index.html" data-debt-page="history">ประวัติ</a>
+          <a href="index.html" data-debt-page="rates">ดอกเบี้ย</a>
+          <a href="index.html" data-debt-page="schedules">งวดชำระ</a>
+        </nav>
+        <div id="schedule-status" class="notice" role="status" aria-live="polite"></div>
+        <section class="context-summary">
+          <span>ยอดหนี้คงเหลือวันนี้</span>
+          <strong id="debt-balance">—</strong>
+        </section>
+        <div class="form-page">
+          <div
+            id="guided-allocation-context"
+            class="guided-payment-context"
+            role="status"
+            hidden
+          ></div>
+          <section class="card plan-picker">
+            <label for="selected-plan">แผนชำระ</label>
+            <select id="selected-plan" disabled>
+              <option value="">ยังไม่มีแผนชำระ</option>
+            </select>
+            <button id="more-plans" class="plain-button" type="button" hidden>โหลดแผนเก่ากว่า</button>
+          </section>
+          <section class="card" aria-labelledby="allocate-title">
+            <h2 id="allocate-title">ผูกยอดชำระกับงวด</h2>
+            <p class="subtitle">เลือกรายการที่บันทึกชำระไว้แล้ว ไม่หักยอดหนี้ซ้ำ</p>
+            <form id="allocation-form">
+              <fieldset id="allocation-fields" disabled>
+                <label for="allocation-payment">รายการชำระที่ยังไม่ถูกย้อน</label>
+                <select id="allocation-payment" name="event_id" required>
+                  <option value="">เลือกรายการชำระ</option>
+                </select>
+                <button id="more-payments" class="plain-button" type="button" hidden>
+                  โหลดรายการชำระเก่ากว่า
+                </button>
+                <p id="payment-available" class="hint" role="status" aria-live="polite">
+                  เลือกรายการเพื่อดูยอดที่ยังผูกได้
+                </p>
+                <label for="allocation-installment">งวดที่ต้องการผูกยอดในแผนที่เลือก</label>
+                <select id="allocation-installment" name="installment_id" required>
+                  <option value="">เลือกงวดค้าง</option>
+                </select>
+                <label for="allocation-amount">จำนวนเงินที่ผูกกับงวด (บาท)</label>
+                <input
+                  id="allocation-amount"
+                  name="amount"
+                  type="text"
+                  inputmode="decimal"
+                  pattern="[0-9]+([.][0-9]{1,2})?"
+                  maxlength="15"
+                  required
+                />
+              </fieldset>
+              <p class="hint">
+                ผูกบางส่วนได้ แต่ต้องไม่เกินยอดที่เหลือของรายการชำระและยอดค้างงวด ระบบตรวจอีกครั้งขณะบันทึก
+                ยังแก้หรือลบการผูกยอดจากหน้านี้ไม่ได้
+              </p>
+              <button id="allocate" class="primary" type="submit" disabled>ยืนยันผูกยอดกับงวด</button>
+            </form>
+            <p class="small">
+              <a href="index.html" data-debt-page="payment">ไปบันทึกชำระที่หน้ารายละเอียดหนี้ →</a>
+            </p>
+          </section>
+          <div id="schedule-mutation-status" class="notice" role="status" aria-live="polite"></div>
+          <button id="edit-schedule-mutation" class="plain-button" type="button" hidden>
+            แก้ไขข้อมูลก่อนส่งใหม่
+          </button>
+          <p>
+            <a href="index.html" data-debt-page="schedules">ดูผลในตารางงวด →</a>
+          </p>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · ระบบบันทึกหนี้ส่วนบุคคล</footer>
+    <noscript>กรุณาเปิด JavaScript เพื่อใช้ระบบ</noscript>
+  </body>
+</html>
