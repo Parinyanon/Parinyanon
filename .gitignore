@@ -1,0 +1,19 @@
+# This repository contains only the reviewed static release.
+.env
+.env.*
+!.env.example
+node_modules/
+.qa/
+test-results/
+server/
+docs/
+tools/
+tests/
+*.sql
+*.log
+*.bak
+*.pem
+*.key
+*.p12
+*.pfx
+*.map

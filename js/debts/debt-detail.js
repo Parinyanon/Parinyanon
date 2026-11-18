@@ -1,4 +1,4 @@
-﻿import { authReady } from '../auth/auth.js';
+import { authReady } from '../auth/auth.js';
 import {
   createDebtService,
   createSubmission,
