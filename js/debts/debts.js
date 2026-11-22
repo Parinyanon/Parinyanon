@@ -1,6 +1,7 @@
 import { authReady } from '../auth/auth.js';
 import { createDebtService, createDebtPayload, createSubmission } from '../data/debt-service.js';
 import { money } from '../core/format.js';
+import { confirmTrash } from './trash-actions.js';
 import { debtUrl, protectPendingNavigation } from '../core/navigation.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -149,6 +150,22 @@ function appendDebt(row) {
   arrow.setAttribute('aria-hidden', 'true');
   link.append(arrow);
   balance.append(link);
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.className = 'plain-button danger-button';
+  remove.textContent = 'ลบหนี้';
+  remove.setAttribute('aria-label', `ลบหนี้ ${title.textContent}`);
+  remove.onclick = () =>
+    confirmTrash({
+      client,
+      debt,
+      balance: row.balance?.total_due,
+      canAct: () => !stopped,
+      onDone: () => {
+        location.href = 'trash.html?moved=1';
+      },
+    });
+  balance.append(remove);
   item.append(balance);
   list.append(item);
 }

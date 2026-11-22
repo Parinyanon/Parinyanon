@@ -35,6 +35,7 @@ export function safeReturnPath(value) {
     if (
       [
         'index.html',
+        'trash.html',
         'create-debt.html',
         'overview.html',
         'installments.html',

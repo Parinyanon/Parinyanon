@@ -1,4 +1,5 @@
 import { authReady } from '../auth/auth.js';
+import { confirmTrash } from './trash-actions.js';
 import {
   createDebtService,
   createSubmission,
@@ -98,6 +99,7 @@ function errorText(error) {
   return 'โหลดหรือบันทึกไม่สำเร็จ กรุณาตรวจอินเทอร์เน็ตแล้วลองใหม่';
 }
 function updateControls() {
+  disable('#delete-debt', stopped || busy || Boolean(pending) || !snapshot);
   const editable = !stopped && !busy && !pending && snapshot && !snapshot.debt.is_archived;
   const payable =
     editable && !recoveryChecking && !recoveredPayment && Number(snapshot.balance?.total_due) > 0;
@@ -688,6 +690,18 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden) scheduleRefresh();
 });
 const ready = await authReady;
+$('#delete-debt')?.addEventListener('click', () => {
+  if (!snapshot || stopped || busy || pending) return;
+  confirmTrash({
+    client,
+    debt: snapshot.debt,
+    balance: snapshot.balance?.total_due,
+    canAct: () => !stopped && !busy && !pending,
+    onDone: () => {
+      location.href = 'trash.html?moved=1';
+    },
+  });
+});
 if (ready?.session && !stopped) {
   client = ready.client;
   ownerId = ready.session.user.id;

@@ -1,0 +1,430 @@
+.trash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.trash-heading > a {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .trash-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+.trash-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+.trash-item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border, #88958d);
+  overflow-wrap: anywhere;
+}
+.trash-item h2 {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+.trash-dialog {
+  color: var(--ink, #172b25);
+  background: var(--surface, #fff);
+  border: 1px solid #81938b;
+  border-radius: 16px;
+  padding: 24px;
+  width: min(480px, calc(100vw - 32px));
+  max-height: 85dvh;
+  overflow: auto;
+  box-sizing: border-box;
+}
+.trash-dialog h2 {
+  font-size: 1.3rem;
+  overflow-wrap: anywhere;
+}
+.trash-dialog p {
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.trash-dialog::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+.trash-dialog input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-block: 10px;
+}
+button.danger-button {
+  color: #ac2535;
+  border-color: #c96972;
+  background: #fff4f4;
+  min-height: 44px;
+}
+button.danger-button:hover {
+  background: #fbe1e4;
+}
+.trash-page {
+  --trash-soft: #edf3ef;
+  --trash-label: #49685d;
+  --trash-warning-bg: #fff2d6;
+  --trash-warning-ink: #795415;
+}
+.theme-dark .trash-page {
+  --trash-soft: #253e32;
+  --trash-label: #bad8c9;
+  --trash-warning-bg: #463b24;
+  --trash-warning-ink: #f2d093;
+}
+.trash-hero {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 130px;
+  gap: 24px;
+  align-items: center;
+  padding: 30px 32px;
+  border-radius: 20px;
+  background: linear-gradient(115deg, #173f3a, #225f50);
+  color: #fff;
+  box-shadow: 0 8px 28px #102c2312;
+}
+.trash-hero-icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: #ffffff12;
+  border: 1px solid #ffffff22;
+  color: #dbeddf;
+  align-self: start;
+}
+.trash-hero-icon svg {
+  width: 32px;
+  height: 32px;
+}
+.trash-eyebrow {
+  color: #e5d49f;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.trash-hero h1 {
+  color: #fff;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.5;
+  margin: 5px 0 10px;
+}
+.trash-hero p {
+  color: #d1e5dc;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+.trash-hero a.trash-back {
+  color: #fff;
+  background: #ffffff0d;
+  border-color: #ffffff38;
+  margin-top: 18px;
+  min-height: 44px;
+}
+.trash-hero a.trash-back:hover {
+  background: #ffffff20;
+}
+.trash-retention {
+  border-left: 1px solid #ffffff30;
+  text-align: center;
+  display: grid;
+  gap: 5px;
+  color: #d1e5dc;
+  font-size: 0.78rem;
+  padding-left: 20px;
+}
+.trash-retention strong {
+  color: #f0dfb5;
+  font-size: 3rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.trash-retention strong span {
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 8px;
+}
+.trash-page #trash-status {
+  margin: 16px 0;
+  min-height: 24px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.trash-page #trash-status[data-error='true'] {
+  color: var(--danger);
+}
+.trash-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 24px;
+  align-items: start;
+}
+.trash-panel {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  overflow: hidden;
+  min-width: 0;
+}
+.trash-panel-heading {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+.trash-panel-heading h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+.trash-count {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.trash-page .trash-list {
+  margin: 0;
+}
+.trash-page .trash-item {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 14px;
+  padding: 22px;
+  border-color: var(--line);
+}
+.trash-page .trash-item:last-child {
+  border-bottom: 0;
+}
+.trash-record-icon {
+  width: 40px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--trash-soft);
+  color: var(--trash-label);
+  border-radius: 10px;
+}
+.trash-record-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.trash-record-copy {
+  min-width: 0;
+}
+.trash-page .trash-item h2 {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 7px;
+}
+.trash-record-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+.trash-record-side {
+  display: grid;
+  gap: 16px;
+  justify-items: end;
+}
+.trash-expiry {
+  display: inline-flex;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--trash-label);
+  background: var(--trash-soft);
+  white-space: nowrap;
+}
+.trash-expiry[data-state='soon'] {
+  background: var(--trash-warning-bg);
+  color: var(--trash-warning-ink);
+}
+.trash-expiry[data-state='expired'] {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.trash-page button.trash-restore {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--button-ink);
+  min-height: 44px;
+}
+.trash-page button.trash-restore:hover {
+  background: var(--brand-hover);
+}
+.trash-page button.trash-restore:disabled {
+  opacity: 0.45;
+}
+.trash-page button.trash-purge {
+  color: var(--danger);
+  background: transparent;
+  border-color: transparent;
+  padding-inline: 8px;
+  min-height: 44px;
+}
+.trash-page button.trash-purge:hover {
+  background: var(--danger-bg);
+}
+.trash-guide {
+  border-radius: 16px;
+  background: var(--trash-soft);
+  padding: 22px;
+  color: var(--ink);
+}
+.trash-guide-label {
+  font-size: 0.73rem;
+  color: var(--trash-label);
+}
+.trash-guide h2 {
+  font-size: 1rem;
+  margin: 5px 0 20px;
+}
+.trash-guide > div + div {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  margin-top: 18px;
+}
+.trash-guide strong {
+  font-size: 0.85rem;
+}
+.trash-guide p {
+  font-size: 0.8rem;
+  line-height: 1.9;
+  color: var(--muted);
+  margin: 7px 0 0;
+}
+.trash-guide .trash-guide-note {
+  margin-top: 20px;
+  font-size: 0.73rem;
+}
+.trash-pagination {
+  border-top: 1px solid var(--line);
+  padding: 16px 22px;
+  justify-content: space-between;
+}
+.trash-pagination span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.trash-pagination[hidden],
+.trash-empty[hidden] {
+  display: none;
+}
+.trash-empty {
+  padding: 40px 24px;
+  text-align: center;
+}
+.trash-empty-symbol {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  color: var(--trash-label);
+  background: var(--trash-soft);
+  font-size: 1.5rem;
+}
+.trash-empty h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+.trash-empty p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+}
+@media (max-width: 1100px) {
+  .trash-layout {
+    grid-template-columns: 1fr;
+  }
+  .trash-guide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 24px;
+  }
+  .trash-guide-label,
+  .trash-guide h2,
+  .trash-guide .trash-guide-note {
+    grid-column: 1/-1;
+  }
+  .trash-guide > div + div {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+}
+@media (max-width: 600px) {
+  .trash-hero {
+    grid-template-columns: minmax(0, 1fr) 60px;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 16px;
+  }
+  .trash-hero-icon {
+    display: none;
+  }
+  .trash-hero h1 {
+    font-size: 1.4rem;
+  }
+  .trash-hero p {
+    font-size: 0.82rem;
+  }
+  .trash-hero p br {
+    display: none;
+  }
+  .trash-retention {
+    padding-left: 12px;
+    font-size: 0.67rem;
+    align-self: start;
+    margin-top: 28px;
+  }
+  .trash-retention strong {
+    font-size: 2.2rem;
+  }
+  .trash-panel-heading {
+    padding: 16px;
+  }
+  .trash-page .trash-item {
+    grid-template-columns: 34px minmax(0, 1fr);
+    padding: 18px 16px;
+    gap: 12px;
+  }
+  .trash-record-icon {
+    width: 34px;
+    height: 40px;
+  }
+  .trash-record-side {
+    grid-column: 2;
+    justify-items: start;
+    gap: 12px;
+  }
+  .trash-record-copy p {
+    font-size: 0.78rem;
+  }
+  .trash-guide {
+    padding: 20px;
+    grid-template-columns: 1fr;
+  }
+  .trash-guide > div + div {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+  .trash-pagination {
+    padding: 16px;
+    gap: 6px;
+  }
+  .trash-pagination button {
+    padding-inline: 10px;
+  }
+}

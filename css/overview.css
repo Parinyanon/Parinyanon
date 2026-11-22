@@ -1,0 +1,625 @@
+/* Smart Rows: สีและเลย์เอาต์เฉพาะหน้าภาพรวม ไม่เปลี่ยนธีมของหน้าอื่น */
+body[data-workspace='overview'] {
+  --canvas: #111b29;
+  --surface: #1a2b41;
+  --sidebar: #152335;
+  --ink: #f0f5fc;
+  --muted: #adbed4;
+  --line: #30455e;
+  --brand: #aecfff;
+  --brand-hover: #c7dfff;
+  --button-ink: #122e53;
+  --accent: #294565;
+  --nav-active: #2a4361;
+  --sidebar-text: #adbed4;
+  --danger: #ffbec9;
+  --danger-bg: #472c3a;
+  background: var(--canvas);
+  color: var(--ink);
+  color-scheme: dark;
+  min-height: 100dvh;
+}
+body[data-workspace='overview'] .shell {
+  width: 100%;
+  max-width: 1256px;
+  padding: 30px 28px 0;
+  margin: 0 auto 32px;
+}
+body[data-workspace='overview'] .topbar {
+  max-width: none;
+}
+body[data-workspace='overview'] .brand-icon {
+  background: #315681;
+}
+body[data-workspace='overview'] .page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+body[data-workspace='overview'] .page-heading h1 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  margin: 0;
+}
+body[data-workspace='overview'] .page-heading .small {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+}
+body[data-workspace='overview'] .heading-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+body[data-workspace='overview'] :is(.action-button, .plain-button, .icon-button) {
+  min-height: 44px;
+}
+body[data-workspace='overview'] .action-button {
+  background: var(--brand);
+  color: var(--button-ink);
+  border-color: var(--brand);
+  border-radius: 10px;
+}
+body[data-workspace='overview'] .action-button:hover {
+  background: var(--brand-hover);
+}
+body[data-workspace='overview'] .plain-button {
+  background: transparent;
+  color: var(--brand);
+  border-color: var(--line);
+}
+body[data-workspace='overview'] #workspace-status:empty {
+  display: none;
+}
+body[data-workspace='overview'] #priority-content:empty {
+  display: none;
+}
+
+/* จอใหญ่: สรุปซ้าย รายการทำงานขวา; ใช้ minmax(0,…) ให้ชื่อและยอดยาวขึ้นบรรทัดได้ */
+.overview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr);
+  gap: 36px;
+  align-items: start;
+}
+.overview-sidebar,
+.overview-main {
+  min-width: 0;
+}
+.overview-sidebar {
+  display: grid;
+  gap: 20px;
+}
+.overview-summary {
+  background: linear-gradient(120deg, #29496d, #1d334f);
+  border: 1px solid #42658d;
+  border-radius: 20px;
+  padding: 24px 24px 0;
+  color: #f0f5fc;
+  overflow-wrap: anywhere;
+}
+.overview-summary h2 {
+  color: #ccdcf0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0;
+}
+.overview-summary-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#overview-month-name {
+  font-size: 0.75rem;
+  color: #ccdcf0;
+  background: #375575;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.overview-figure,
+.overview-summary[data-mode='balance'] #overview-total {
+  display: block;
+  margin: 12px 0 4px;
+  line-height: 1.3;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.overview-unit {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #c3d6ee;
+  letter-spacing: 0;
+}
+.overview-total-block {
+  padding: 17px 0 20px;
+}
+.overview-summary[data-mode='month'] .overview-total-block {
+  border-top: 1px solid #44607f;
+  margin-top: 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.overview-summary[data-mode='month'] #overview-total {
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.overview-summary[data-mode='month'] .overview-total-block h2 {
+  font-size: 0.8rem;
+}
+.overview-summary[data-mode='month'] #overview-total .overview-unit {
+  font-size: 0.75rem;
+}
+body[data-workspace='overview'] .overview-urgency {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: calc(100% + 48px);
+  margin: 0 -24px;
+  border: 0;
+  border-top: 1px solid #466184;
+  border-radius: 0 0 20px 20px;
+  padding: 14px 20px;
+  min-height: 56px;
+  background: #192f4a;
+  color: #c7dfff;
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+}
+.overview-urgency > span:first-child {
+  color: #ffbec9;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+.overview-urgency strong {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.overview-urgency > span:last-child {
+  white-space: nowrap;
+}
+.overview-scope-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.7;
+  margin: -8px 0 4px;
+}
+.overview-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+}
+.overview-section-heading h2 {
+  font-size: 1.0625rem;
+  margin: 0;
+}
+.overview-section-heading :is(a, .small) {
+  font-size: 0.8rem;
+}
+.overview-section-heading a {
+  color: var(--brand);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+#overview-schedule-count {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 400;
+  margin-left: 6px;
+}
+
+/* รายการกางทีละงวด: summary เป็นปุ่มพื้นฐานของเบราว์เซอร์ ใช้คีย์บอร์ดได้โดยไม่ทำปุ่มซ้อน */
+.overview-installment {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+  transition:
+    background-color 0.18s,
+    border-color 0.18s;
+  scroll-margin-top: 20px;
+}
+.overview-installment-trigger {
+  font-weight: 400;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) minmax(0, 0.65fr);
+  align-items: center;
+  gap: 18px;
+  min-height: 108px;
+  padding: 19px 0;
+  list-style: none;
+  cursor: pointer;
+}
+.overview-installment-trigger::-webkit-details-marker {
+  display: none;
+}
+.overview-date {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  width: 42px;
+  min-height: 52px;
+  line-height: 1.2;
+  font-size: 1.5rem;
+  color: #b6d2f5;
+  font-variant-numeric: tabular-nums;
+}
+.overview-date small {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.overview-installment-info {
+  min-width: 0;
+}
+.overview-installment-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.overview-creditor {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+.overview-payment-state {
+  display: block;
+  color: #b9cce4;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+.overview-installment[data-overdue='true'] .overview-payment-state {
+  color: #ffbdc8;
+}
+.overview-installment-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.overview-installment-value > strong {
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  line-height: 1.4;
+}
+.overview-installment-value small {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+.overview-chevron {
+  color: #b7d4fb;
+  font-size: 1.25rem;
+  transition: transform 0.18s;
+}
+.overview-installment[open] {
+  background: var(--surface);
+  border: 1px solid #45658b;
+  border-radius: 16px;
+  padding: 0 12px;
+  margin: 0 -12px 2px;
+  box-shadow: 0 7px 20px #06101c22;
+}
+.overview-installment[open] .overview-chevron {
+  transform: rotate(180deg);
+}
+.overview-installment[open] > summary {
+  margin-bottom: 0;
+}
+.overview-installment[open] .overview-date {
+  background: #294565;
+  border-radius: 10px;
+  color: #e1ecfb;
+}
+.overview-installment-panel {
+  display: grid;
+  gap: 14px;
+  padding: 0 12px 18px;
+}
+.overview-installment-due,
+.overview-installment-balance {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px 16px;
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.overview-installment-due {
+  border-top: 1px solid #38516e;
+  padding-top: 14px;
+}
+.overview-installment-panel strong {
+  font-weight: 500;
+  color: #dee9f8;
+  font-variant-numeric: tabular-nums;
+}
+body[data-workspace='overview'] .overview-installment-panel > .action-button {
+  text-align: center;
+  min-height: 50px;
+  padding: 12px 20px;
+}
+.overview-installment-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.overview-installment-links a,
+.overview-all-schedules {
+  color: var(--brand);
+  text-decoration: none;
+  font-size: 0.875rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.overview-all-schedules {
+  width: 100%;
+  margin-top: 8px;
+  border-bottom: 1px solid var(--line);
+  padding: 8px;
+}
+.overview-installment-links a:hover,
+.overview-all-schedules:hover {
+  text-decoration: underline;
+}
+
+/* สถานะและหนี้ย่อ: ใช้ข้อมูลจริง ไม่มีแผนต้องไม่แสดงยอดรายเดือนเป็นศูนย์ */
+.overview-state {
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+.overview-state h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  line-height: 1.6;
+}
+.overview-state p {
+  color: var(--muted);
+  margin: 12px 0 22px;
+}
+.overview-state .action-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+}
+.overview-debt-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+.overview-debt-title {
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  overflow-wrap: anywhere;
+}
+.overview-debt-title:hover {
+  color: var(--brand);
+}
+.overview-debt-row .small {
+  font-size: 0.8rem;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.overview-debt-amount {
+  font-size: 1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.overview-debt-plan {
+  color: var(--brand);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+body[data-workspace='overview'] .footer {
+  max-width: 1256px;
+  padding: 20px 28px;
+}
+
+/* แท็บเล็ตและมือถือเรียงยอดก่อนงวด แล้วจึงหนี้ย่อ เพื่อไม่ผลักงานหลักลงล่าง */
+@media (max-width: 1100px) {
+  .overview-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .overview-sidebar {
+    display: contents;
+  }
+  .overview-summary {
+    grid-row: 1;
+  }
+  .overview-scope-note {
+    grid-row: 2;
+    margin: -12px 0 0;
+  }
+  .overview-main {
+    grid-row: 3;
+  }
+  #overview-debts-panel {
+    grid-row: 4;
+  }
+  .overview-debt-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.65fr);
+    align-items: baseline;
+  }
+  .overview-debt-amount {
+    text-align: right;
+  }
+}
+@media (max-width: 760px) {
+  body[data-workspace='overview'] .install-promo {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 10px 12px;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  body[data-workspace='overview'] .install-promo > img,
+  body[data-workspace='overview'] .install-promo-copy p {
+    display: none;
+  }
+  body[data-workspace='overview'] .install-promo-copy strong {
+    font-size: 0.75rem;
+  }
+  body[data-workspace='overview'] .install-promo-actions {
+    grid-column: auto;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  body[data-workspace='overview'] .install-promo-actions button {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+  body[data-workspace='overview'] .shell {
+    padding: 22px 18px 0;
+  }
+  body[data-workspace='overview'] .page-heading {
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  body[data-workspace='overview'] .page-heading > div:first-child {
+    flex: 1 1 160px;
+  }
+  body[data-workspace='overview'] .heading-actions {
+    margin-left: auto;
+  }
+  body[data-workspace='overview'] .page-heading h1 {
+    font-size: 1.5rem;
+  }
+  body[data-workspace='overview'] .page-heading .small {
+    max-width: 240px;
+    font-size: 0.75rem;
+  }
+  body[data-workspace='overview'] .heading-actions .action-button {
+    font-size: 0.875rem;
+    padding: 10px 12px;
+  }
+  .overview-summary {
+    padding: 21px 22px 0;
+  }
+  .overview-figure,
+  .overview-summary[data-mode='balance'] #overview-total {
+    font-size: clamp(2rem, 8.6vw, 2.5rem);
+  }
+  body[data-workspace='overview'] .overview-urgency {
+    width: calc(100% + 44px);
+    margin-inline: -22px;
+    padding-inline: 18px;
+    font-size: 0.8125rem;
+  }
+  .overview-installment-trigger {
+    grid-template-columns: 36px minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: 10px;
+    min-height: 104px;
+  }
+  .overview-date {
+    width: 36px;
+    font-size: 1.3rem;
+  }
+  .overview-installment-title {
+    font-size: 0.9375rem;
+  }
+  .overview-creditor {
+    font-size: 0.75rem;
+  }
+  .overview-payment-state {
+    font-size: 0.8125rem;
+  }
+  .overview-installment-value > strong {
+    font-size: 1.25rem;
+  }
+  .overview-installment[open] {
+    margin-inline: -8px;
+    padding-inline: 8px;
+  }
+  .overview-installment-panel {
+    padding-inline: 8px;
+  }
+  .overview-state {
+    padding: 22px;
+  }
+  .overview-state h2 {
+    font-size: 1.25rem;
+  }
+  body[data-workspace='overview'] .footer {
+    padding-inline: 18px;
+  }
+}
+@media (max-width: 360px) {
+  body[data-workspace='overview'] .shell {
+    padding-inline: 14px;
+  }
+  .overview-summary {
+    padding-inline: 18px;
+  }
+  body[data-workspace='overview'] .overview-urgency {
+    width: calc(100% + 36px);
+    margin-inline: -18px;
+    padding-inline: 16px;
+  }
+  .overview-installment-trigger {
+    grid-template-columns: 30px minmax(0, 1fr) minmax(0, 0.88fr);
+    gap: 8px;
+  }
+  .overview-date {
+    width: 30px;
+  }
+  .overview-installment-title {
+    font-size: 0.875rem;
+  }
+  .overview-installment-value > strong {
+    font-size: 1.0625rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overview-installment,
+  .overview-chevron {
+    transition: none;
+  }
+}

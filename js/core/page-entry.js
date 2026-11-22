@@ -1,6 +1,7 @@
 // Keep the outgoing snapshot visible until this page is ready.
 // The budget releases a slow page to its existing loading/error states, never waits forever.
 const controllers = {
+  trash: () => import('../debts/trash.js'),
   'change-password': () => import('../auth/change-password.js'),
   installments: () => import('../workspace/installments.js'),
   privacy: () => import('../privacy/privacy.js'),

@@ -1,10 +1,10 @@
-import { installmentEntry } from '../core/installment-entry.js';
+import { createOverviewView } from './overview.js';
 import { authReady } from '../auth/auth.js';
 import { createWorkspaceService, settingsPayload, csvText } from '../data/workspace-service.js';
 import { createSubmission, createDebtService } from '../data/debt-service.js';
-import { debtUrl, installmentPaymentUrl, protectPendingNavigation } from '../core/navigation.js';
+import { debtUrl, protectPendingNavigation } from '../core/navigation.js';
 import { applyTheme, refreshReminderBadges } from '../core/experience.js';
-import { bangkokToday, dateText, money } from '../core/format.js';
+import { bangkokToday } from '../core/format.js';
 import { getPublicFeatures } from '../data/supabase-client.js';
 const $ = (selector) => document.querySelector(selector),
   mode = document.body.dataset.workspace;
@@ -99,175 +99,14 @@ function updateExportPresentation() {
 }
 $('#export-form')?.addEventListener('change', updateExportPresentation);
 updateExportPresentation();
-function displayOverviewBalance(value) {
-  const target = $('#overview-total'),
-    formatted = money(value);
-  target.replaceChildren(
-    element('span', formatted.replace(/ บาท$/, ''), 'overview-balance-number'),
-  );
-  if (formatted !== '—') target.append(element('span', ' บาท', 'overview-balance-unit'));
-  target.dataset.long = String(formatted.length > 20);
-}
-function scheduleFocus(row, today) {
-  const focus = element('div', undefined, 'schedule-focus');
-  focus.dataset.overdue = String(row.due_on < today);
-  const timing = element('div', undefined, 'payment-task-timing');
-  timing.append(
-    element(
-      'span',
-      row.due_on < today ? 'เลยกำหนด' : row.due_on === today ? 'ครบกำหนดวันนี้' : 'งวดถัดไป',
-      'payment-state',
-    ),
-    element('span', 'ครบกำหนด ' + dateText(row.due_on)),
-  );
-  const name = element('a', row.debt.title, 'payment-task-title');
-  name.href = debtUrl('debt-detail', row.debt_id);
-  const amount = element('p', undefined, 'focus-amount');
-  amount.append(element('span', 'ยอดงวดคงเหลือ '), element('strong', money(row.remaining_amount)));
-  const pay = element('a', 'บันทึกการชำระ', 'action-button');
-  pay.href = installmentPaymentUrl(row.debt_id, row.schedule_id, row.id);
-  pay.setAttribute('aria-label', 'บันทึกการชำระ ' + row.debt.title);
-  const link = element('a', 'ดูแผนงวด →', 'overview-panel-link');
-  link.href = debtUrl('schedules', row.debt_id, row.schedule_id);
-  const actions = element('div', undefined, 'focus-actions');
-  actions.append(pay, link);
-  focus.append(timing, name);
-  if (row.debt.creditor) focus.append(element('p', row.debt.creditor, 'payment-creditor'));
-  focus.append(amount, actions);
-  return focus;
-}
-function renderOverviewDebts(result, noDebts, canSetPlan) {
-  const panel = $('#overview-debts-panel'),
-    list = $('#overview-debts');
-  panel.hidden = noDebts;
-  list.replaceChildren();
-  if (noDebts) return;
-  if (result.status === 'rejected') {
-    list.append(element('p', 'โหลดรายการหนี้ไม่สำเร็จ', 'small'));
-    const retry = element('button', 'ลองโหลดรายการใหม่', 'plain-button');
-    retry.type = 'button';
-    retry.addEventListener('click', () => refresh());
-    list.append(retry);
-    return;
-  }
-  const rows = result.value.slice(0, 4);
-  if (!rows.length) {
-    list.append(element('p', 'รายการหนี้ที่ยังไม่ซ่อนจะแสดงที่นี่ เปิด “ดูทั้งหมด” เพื่อดูรายการที่ซ่อนไว้', 'small'));
-    return;
-  }
-  for (const { debt, balance } of rows) {
-    const row = element('article', undefined, 'overview-debt-row');
-    const info = element('div', undefined, 'overview-debt-info');
-    const title = element('a', debt.title, 'payment-task-title');
-    title.href = debtUrl('debt-detail', debt.id);
-    info.append(title);
-    if (debt.creditor) info.append(element('p', debt.creditor, 'payment-creditor'));
-    if (debt.due_on) info.append(element('p', 'ครบกำหนดหนี้ ' + dateText(debt.due_on), 'small'));
-    const amount = element('div', undefined, 'overview-debt-amount');
-    amount.append(element('span', 'ยอดคงเหลือ'), element('strong', money(balance?.total_due)));
-    const canPay = Number(balance?.total_due) > 0;
-    const action = element(
-      'a',
-      canPay && canSetPlan ? 'ตั้งแผนงวด →' : 'ดูรายละเอียด →',
-      'overview-section-link',
-    );
-    action.href = debtUrl(canPay && canSetPlan ? 'create-schedule' : 'debt-detail', debt.id);
-    action.setAttribute(
-      'aria-label',
-      (canPay && canSetPlan ? 'ตั้งแผนงวด ' : 'ดูรายละเอียด ') + debt.title,
-    );
-    if (!canPay && Number(balance?.total_due) === 0)
-      info.append(element('span', 'ชำระครบแล้ว', 'overview-settled'));
-    row.append(info, amount, action);
-    list.append(row);
-  }
-}
+const overviewView =
+  mode === 'overview' ? createOverviewView(document.getElementById('private-content')) : null;
 async function renderOverview(current) {
-  const priority = $('#priority-content'),
-    list = $('#upcoming-installments');
-  const monthly = $('#overview-month'),
-    schedulePanel = $('#overview-schedule-panel');
-  priority.replaceChildren(element('p', 'กำลังโหลดกำหนดชำระ…', 'small'));
-  list.replaceChildren();
-  monthly.hidden = true;
-  schedulePanel.hidden = true;
-  $('#overview-overdue').hidden = true;
-  $('#overview-month-total').textContent = '—';
-  $('#overview-total').textContent = '—';
-  $('#overview-asof').textContent = 'กำลังโหลดยอดหนี้…';
-  $('#overview-debts-panel').hidden = false;
-  $('#overview-debts').replaceChildren(element('p', 'กำลังโหลดรายการหนี้…', 'small'));
-  const today = bangkokToday();
-  $('#overview-month-name').textContent = new Intl.DateTimeFormat('th-TH', {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'Asia/Bangkok',
-  }).format(new Date(today + 'T12:00:00+07:00'));
-  const [summaryResult, scheduleResult, debtResult] = await Promise.allSettled([
-    service.overview(),
-    service.paymentOverview(today),
-    createDebtService(client).list(),
-  ]);
-  if (stopped || current !== epoch) return;
-  if (summaryResult.status === 'fulfilled') {
-    displayOverviewBalance(summaryResult.value.total_due);
-    $('#overview-asof').textContent =
-      'ณ ' + dateText(summaryResult.value.as_of) + ' · รวมรายการที่ซ่อนไว้';
-  } else {
-    $('#overview-total').textContent = 'โหลดไม่สำเร็จ';
-    $('#overview-asof').textContent = 'กดอัปเดตข้อมูลเพื่อลองอีกครั้ง';
-  }
-  const noDebts =
-    summaryResult.status === 'fulfilled' && Number(summaryResult.value.total_debts) === 0;
-  renderOverviewDebts(
-    debtResult,
-    noDebts,
-    scheduleResult.status === 'fulfilled' && !scheduleResult.value.hasSchedules,
+  return overviewView.render(
+    service,
+    createDebtService(client),
+    () => !stopped && current === epoch,
   );
-  if (scheduleResult.status === 'rejected') {
-    priority.replaceChildren(
-      element('p', 'โหลดกำหนดชำระไม่สำเร็จ', 'schedule-status'),
-      element('p', 'กดอัปเดตข้อมูลด้านบนเพื่อลองอีกครั้ง', 'small'),
-    );
-    throw scheduleResult.reason;
-  }
-  const data = scheduleResult.value;
-  $('#overview-overdue').hidden = !data.overdueCount;
-  $('#overview-overdue-label').textContent = `เลยกำหนด ${data.overdueCount} งวด`;
-  $('#overview-overdue-total').textContent = money(data.overdueRemaining);
-  priority.replaceChildren();
-  if (noDebts) {
-    priority.append(element('p', 'เริ่มบันทึกหนี้ของคุณ', 'schedule-status'));
-    const add = element('a', 'เพิ่มหนี้รายการแรก', 'overview-panel-link action-button');
-    add.href = 'create-debt.html';
-    priority.append(add);
-  } else if (!data.hasSchedules) {
-    priority.append(element('p', 'ยังไม่ได้ตั้งแผนงวด', 'schedule-status'));
-    const choose = element('a', 'เลือกหนี้เพื่อตั้งแผน →', 'overview-panel-link overview-plan-action');
-    choose.href = 'index.html';
-    priority.append(choose);
-  } else {
-    monthly.hidden = false;
-    $('#overview-month-total').textContent = money(data.monthRemaining);
-    if (!data.installments.length) {
-      priority.append(element('p', 'ไม่มีงวดค้างชำระ', 'schedule-status'));
-      const debts = element('a', 'ดูรายการหนี้ →', 'overview-panel-link');
-      debts.href = 'index.html';
-      priority.append(debts);
-    } else {
-      priority.append(scheduleFocus(data.installments[0], today));
-      const remainingInstallments = data.installments.slice(1);
-      schedulePanel.hidden = !remainingInstallments.length;
-      for (const row of remainingInstallments.slice(0, 2))
-        list.append(installmentEntry(row, today));
-      if (remainingInstallments.length > 2) {
-        const more = element('a', 'ดูงวดชำระทั้งหมด →', 'section-link');
-        more.href = 'installments.html';
-        list.append(more);
-      }
-    }
-  }
-  if (summaryResult.status === 'rejected') throw summaryResult.reason;
 }
 async function renderReminders(current, more = false) {
   const rows = await service.reminders(more ? cursor : null);
@@ -653,34 +492,14 @@ $('#workspace-refresh')?.addEventListener('click', () => {
   refresh();
 });
 function stop() {
+  overviewView?.clear();
   stopped = true;
   if ($('#settings-email')) $('#settings-email').textContent = '';
   epoch++;
   pending = null;
   clearInterval(timer);
   for (const form of document.querySelectorAll('form')) form.reset();
-  for (const id of [
-    'overview-debts',
-    'priority-content',
-    'category-chart',
-    'overview-breakdown',
-    'upcoming-installments',
-    'reminder-list',
-    'category-list',
-  ])
-    $(`#${id}`)?.replaceChildren();
-  for (const id of [
-    'overview-overdue-label',
-    'overview-overdue-total',
-    'overview-total',
-    'overview-month-total',
-    'overview-month-note',
-    'overview-asof',
-    'overview-open',
-    'overview-paid',
-    'overview-overdue',
-  ])
-    if ($(`#${id}`)) $(`#${id}`).textContent = '—';
+  for (const id of ['reminder-list', 'category-list']) $(`#${id}`)?.replaceChildren();
   status('');
   controls();
   if (channel) {

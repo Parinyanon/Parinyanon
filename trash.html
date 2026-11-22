@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#173f3a" />
+    <script src="js/core/page-boot.js"></script>
+    <title>ถังขยะ · จัดหนี้</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script
+      type="module"
+      blocking="render"
+      src="js/core/page-entry.js"
+      data-controller="trash"
+    ></script>
+  </head>
+  <body data-page="dashboard" class="trash-page">
+    <header class="topbar">
+      <a class="brand" href="overview.html"><span class="brand-icon">฿</span> จัดหนี้</a>
+      <div class="account-menu">
+        <span id="identity" class="small"></span
+        ><button
+          id="logout"
+          class="icon-button logout-button"
+          type="button"
+          aria-label="ออกจากระบบ"
+          title="ออกจากระบบ"
+        >
+          <svg
+            class="ui-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M8 12h13" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <main class="shell">
+      <p id="message" role="status"></p>
+      <div id="private-content" hidden>
+        <nav class="breadcrumbs" aria-label="เส้นทาง">
+          <a href="index.html">รายการหนี้</a><span aria-current="page">ถังขยะ</span>
+        </nav>
+        <section class="trash-hero" aria-labelledby="trash-title">
+          <div class="trash-hero-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7" />
+            </svg>
+          </div>
+          <div class="trash-hero-copy">
+            <span class="trash-eyebrow">จัดการรายการที่ลบ</span>
+            <h1 id="trash-title">เปลี่ยนใจได้ กู้หนี้กลับมา</h1>
+            <p>รายการในถังขยะไม่รวมในยอดหนี้ของคุณ<br />หากลบผิด กู้คืนได้ภายใน 30 วันนับจากวันที่ลบ</p>
+            <a class="plain-button trash-back" href="index.html">← กลับรายการหนี้</a>
+          </div>
+          <div class="trash-retention" aria-label="กู้คืนได้ภายใน 30 วัน">
+            <strong>30<span>วัน</span></strong
+            ><span>ระยะเวลากู้คืน</span>
+          </div>
+        </section>
+        <p id="trash-status" role="status" aria-live="polite">กำลังโหลดถังขยะ…</p>
+        <div class="trash-layout">
+          <section class="trash-panel" aria-labelledby="trash-list-title">
+            <div class="trash-panel-heading">
+              <h2 id="trash-list-title">รายการที่ลบ</h2>
+              <span id="trash-count" class="trash-count">กำลังโหลด…</span>
+            </div>
+            <div id="trash-empty" class="trash-empty" hidden>
+              <span class="trash-empty-symbol" aria-hidden="true">✓</span>
+              <h3>ไม่มีรายการในหน้านี้</h3>
+              <p>รายการที่คุณลบจะอยู่ที่นี่ เพื่อให้กู้คืนได้เมื่อต้องการ</p>
+              <a href="index.html" class="plain-button">ไปที่รายการหนี้</a>
+            </div>
+            <ul id="trash-list" class="trash-list"></ul>
+            <nav class="trash-actions trash-pagination" aria-label="หน้ารายการในถังขยะ">
+              <button id="trash-prev" type="button" class="plain-button" disabled>หน้าก่อน</button
+              ><span id="trash-page-number">หน้า 1</span
+              ><button id="trash-next" type="button" class="plain-button" disabled>หน้าถัดไป</button>
+            </nav>
+          </section>
+          <aside class="trash-guide" aria-labelledby="trash-guide-title">
+            <span class="trash-guide-label">ก่อนจัดการรายการ</span>
+            <h2 id="trash-guide-title">กู้คืน หรือ ลบถาวร?</h2>
+            <div>
+              <strong><span aria-hidden="true">↶</span> กู้คืน</strong>
+              <p>นำหนี้ ประวัติชำระ และงวดกลับมา ยอดจะคำนวณตามวันที่ปัจจุบัน การแจ้งเตือนเดิมจะไม่ส่งซ้ำ</p>
+            </div>
+            <div>
+              <strong>ลบถาวร</strong>
+              <p>นำรายการออกจากถังขยะ และกู้คืนผ่านแอปไม่ได้ ต้องพิมพ์ชื่อหนี้เพื่อยืนยันทุกครั้ง</p>
+            </div>
+            <p class="trash-guide-note">ครบ 30 วันจะกู้คืนไม่ได้ แต่ยังเลือกลบถาวรได้จากหน้านี้</p>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">จัดหนี้ · บันทึกหนี้ส่วนบุคคล</footer>
+  </body>
+</html>
