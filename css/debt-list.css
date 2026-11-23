@@ -1,0 +1,855 @@
+/* รายการหนี้: โทนเดียวกับภาพรวม ใช้ shell และระบบบัญชีเดิม */
+body[data-debt-list] .du-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+body[data-debt-list] #private-content label {
+  margin: 0;
+  font-weight: 400;
+}
+body[data-debt-list] #private-content a {
+  color: var(--du-text);
+}
+body[data-debt-list] #private-content a.du-primary {
+  color: #12243d;
+}
+body[data-debt-list] .du-inline button.du-more {
+  flex: 0 0 44px;
+}
+body[data-debt-list] .du-detail > .du-badge {
+  justify-self: start;
+}
+body[data-debt-list] .app-rail nav a {
+  padding-inline: 8px;
+  gap: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+body[data-debt-list] .logout-button {
+  color: #ffbec9;
+  background: #472c3a;
+  border-color: #674052;
+}
+body[data-debt-list] {
+  --danger: #ffbec9;
+  --danger-bg: #472c3a;
+}
+
+body[data-debt-list] {
+  --du-bg: #111b29;
+  --du-panel: #1a2b41;
+  --du-border: #30455e;
+  --du-text: #f0f5fc;
+  --du-muted: #adbed4;
+  --du-accent: #aecfff;
+  color-scheme: dark;
+}
+body[data-debt-list] * {
+  box-sizing: border-box;
+}
+body[data-debt-list] [hidden] {
+  display: none !important;
+}
+body[data-debt-list] :is(h1, h2, h3, p) {
+  margin: 0;
+}
+body[data-debt-list] h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+body[data-debt-list] h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+body[data-debt-list] h3 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+body[data-debt-list] button {
+  font: inherit;
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid var(--du-border);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+}
+body[data-debt-list] button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+body[data-debt-list] .du-primary {
+  background: var(--du-accent);
+  color: #12243d;
+  border-color: var(--du-accent);
+  font-weight: 600;
+}
+body[data-debt-list] :is(button, input, select):focus-visible {
+  outline: 3px solid #bad7ff;
+  outline-offset: 3px;
+}
+body[data-debt-list] :is(input, select) {
+  font:
+    16px/1.4 'Noto Sans Thai',
+    Tahoma,
+    sans-serif;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 12px;
+  background: #17283c;
+  color: var(--du-text);
+  border: 1px solid #405d7e;
+  border-radius: 10px;
+}
+body[data-debt-list] input::placeholder {
+  color: #a8b9cc;
+}
+body[data-debt-list] .du-muted {
+  color: var(--du-muted);
+  font-size: 13px;
+}
+body[data-debt-list] .du-mobile-menu {
+  display: none;
+}
+body[data-debt-list] .du-main {
+  max-width: 1248px;
+  margin: auto;
+  padding: 22px 24px 30px;
+  display: grid;
+  gap: 16px;
+}
+body[data-debt-list] .du-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+body[data-debt-list] .du-heading > button {
+  white-space: nowrap;
+}
+body[data-debt-list] .du-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #192e47;
+  min-width: 0;
+}
+body[data-debt-list] .du-summary > div {
+  min-width: 0;
+}
+body[data-debt-list] .du-summary-label {
+  color: #c6ddfa;
+  font-size: 13px;
+}
+body[data-debt-list] .du-money {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  line-height: 1.35;
+  font-size: 34px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+}
+body[data-debt-list] .du-number {
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+body[data-debt-list] .du-money small {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--du-muted);
+}
+body[data-debt-list] .du-summary-note {
+  max-width: 270px;
+  text-align: right;
+  color: var(--du-muted);
+  font-size: 12px;
+}
+body[data-debt-list] .du-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.42fr) 150px;
+  gap: 9px;
+  align-items: end;
+}
+body[data-debt-list] .du-tools > label {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--du-muted);
+  min-width: 0;
+}
+body[data-debt-list] .du-category-button {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  min-height: 46px;
+}
+body[data-debt-list] .du-category-button > span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+body[data-debt-list] .du-status-tools {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+body[data-debt-list] .du-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+body[data-debt-list] .du-tabs button {
+  font-size: 13px;
+  padding: 9px 12px;
+}
+body[data-debt-list] .du-tabs [aria-pressed='true'] {
+  background: var(--du-accent);
+  color: #12243d;
+  border-color: var(--du-accent);
+}
+body[data-debt-list] .du-sort {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--du-muted);
+  min-width: 160px;
+}
+body[data-debt-list] .du-sort select {
+  font-size: 14px;
+  min-height: 44px;
+}
+body[data-debt-list] .du-mobile-status {
+  display: none;
+}
+body[data-debt-list] .du-filter-state {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--du-muted);
+}
+body[data-debt-list] .du-filter-state button {
+  font-size: 13px;
+  max-width: 100%;
+  text-align: left;
+}
+body[data-debt-list] .du-result-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+body[data-debt-list] .du-result-label h2 {
+  font-size: 17px;
+}
+body[data-debt-list] .du-result-label p {
+  font-size: 13px;
+  color: var(--du-muted);
+}
+body[data-debt-list] .du-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+body[data-debt-list] .du-list {
+  min-width: 0;
+  border-top: 1px solid var(--du-border);
+}
+body[data-debt-list] .du-item {
+  border-bottom: 1px solid var(--du-border);
+  min-width: 0;
+}
+body[data-debt-list] .du-item.is-selected {
+  background: #203b57;
+  box-shadow: inset 3px 0 var(--du-accent);
+  border-radius: 10px;
+}
+body[data-debt-list] button.du-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  text-align: left;
+  border: 0;
+  border-radius: 0;
+  padding: 16px;
+  align-items: center;
+  min-height: 112px;
+}
+body[data-debt-list] .du-row-info {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+body[data-debt-list] .du-row-owner {
+  font-size: 13px;
+  color: var(--du-muted);
+}
+body[data-debt-list] .du-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--du-muted);
+}
+body[data-debt-list] .du-badge {
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: #283e59;
+  color: #c3d7ef;
+  display: inline-block;
+}
+body[data-debt-list] .du-badge.late {
+  background: #472d3c;
+  color: #ffc6d0;
+}
+body[data-debt-list] .du-badge.paid {
+  background: #203d3b;
+  color: #bbdfd8;
+}
+body[data-debt-list] .du-row-value {
+  text-align: right;
+  font-size: 21px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+body[data-debt-list] .du-row-value small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--du-muted);
+  white-space: normal;
+}
+body[data-debt-list] .du-row.large {
+  grid-template-columns: minmax(0, 1fr);
+}
+body[data-debt-list] .du-row.large .du-row-value {
+  text-align: left;
+  white-space: normal;
+}
+body[data-debt-list] .du-inline {
+  display: none;
+  padding: 0 16px 16px;
+  gap: 8px;
+}
+body[data-debt-list] .du-inline button {
+  flex: 1;
+}
+body[data-debt-list] .du-detail {
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+  background: #203b57;
+  border: 1px solid #47668a;
+  border-radius: 16px;
+  min-width: 0;
+}
+body[data-debt-list] .du-detail header {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  justify-content: space-between;
+}
+body[data-debt-list] .du-detail header > div {
+  min-width: 0;
+}
+body[data-debt-list] .du-detail h2 {
+  font-size: 24px;
+  margin: 4px 0;
+}
+body[data-debt-list] .du-detail .du-money {
+  font-size: 38px;
+  margin-top: 5px;
+}
+body[data-debt-list] .du-detail-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+body[data-debt-list] .du-detail-actions button {
+  flex: 1;
+  min-width: 120px;
+}
+body[data-debt-list] .du-detail dl {
+  display: grid;
+  gap: 5px;
+  padding-top: 15px;
+  border-top: 1px solid #405d7e;
+  margin: 0;
+}
+body[data-debt-list] dt {
+  font-size: 13px;
+  color: var(--du-muted);
+}
+body[data-debt-list] dd {
+  margin: 0;
+  font-size: 15px;
+}
+body[data-debt-list] .du-detail-placeholder {
+  color: var(--du-muted);
+  padding: 24px;
+  border: 1px dashed var(--du-border);
+  border-radius: 14px;
+}
+body[data-debt-list] .du-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  color: var(--du-muted);
+  font-size: 13px;
+}
+body[data-debt-list] .du-pagination > div {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+body[data-debt-list] .du-pagination label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+body[data-debt-list] .du-pagination select {
+  width: auto;
+  font-size: 14px;
+  min-height: 44px;
+}
+body[data-debt-list] .du-empty {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+  padding: 24px 12px;
+  border-top: 1px solid var(--du-border);
+}
+body[data-debt-list] .du-empty button {
+  justify-self: center;
+}
+body[data-debt-list] .du-feedback {
+  margin: 0 16px 14px;
+  padding: 10px 12px;
+  border: 1px solid #507c72;
+  border-radius: 9px;
+  background: #203d3b;
+  color: #d0eee4;
+  font-size: 13px;
+}
+body[data-debt-list] .du-dialog {
+  background: var(--du-panel);
+  color: var(--du-text);
+  border: 1px solid #53769f;
+  border-radius: 16px;
+  padding: 20px;
+  width: min(560px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  font:
+    15px/1.6 'Noto Sans Thai',
+    sans-serif;
+}
+body[data-debt-list] .du-dialog::backdrop {
+  background: #07101bd9;
+}
+body[data-debt-list] .du-dialog > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+body[data-debt-list] .du-dialog form {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+body[data-debt-list] .du-dialog label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--du-muted);
+}
+body[data-debt-list] .du-dialog .du-detail {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+body[data-debt-list] .du-category-list {
+  display: grid;
+  max-height: min(340px, max(100px, calc(100dvh - 290px)));
+  overflow: auto;
+  overscroll-behavior: contain;
+  margin-top: 10px;
+  border-top: 1px solid var(--du-border);
+}
+body[data-debt-list] .du-category-list button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  gap: 12px;
+  border: 0;
+  border-bottom: 1px solid var(--du-border);
+  border-radius: 0;
+  padding: 12px;
+  min-height: 48px;
+  font-size: 15px;
+}
+body[data-debt-list] .du-category-list button[aria-pressed='true'] {
+  background: #2b496b;
+}
+body[data-debt-list] .du-category-list button > span:first-child {
+  min-width: 0;
+}
+body[data-debt-list] .du-category-list button small {
+  color: var(--du-muted);
+  white-space: nowrap;
+}
+body[data-debt-list] .du-category-count {
+  font-size: 12px;
+  color: var(--du-muted);
+  margin-top: 8px;
+}
+body[data-debt-list] .du-menu-list {
+  display: grid;
+  gap: 6px;
+}
+body[data-debt-list] .du-menu-list button {
+  text-align: left;
+}
+@media (max-width: 1100px) {
+  body[data-debt-list] .du-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body[data-debt-list] .du-detail-panel {
+    display: none;
+  }
+  body[data-debt-list] .du-inline:not([hidden]) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 1000px) {
+  body[data-debt-list] .du-app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body[data-debt-list] .du-rail {
+    display: none;
+  }
+  body[data-debt-list] .du-mobile-menu {
+    display: block;
+  }
+  body[data-debt-list] .du-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+}
+@media (max-width: 650px) {
+  body[data-debt-list] .du-app {
+    min-height: 700px;
+  }
+  body[data-debt-list] .du-main {
+    padding: 16px 14px 22px;
+    gap: 12px;
+  }
+  body[data-debt-list] .du-topbar {
+    min-height: 48px;
+    padding: 4px 14px;
+  }
+  body[data-debt-list] .du-topbar > span {
+    font-size: 11px;
+  }
+  body[data-debt-list] .du-topbar strong {
+    display: none;
+  }
+  body[data-debt-list] h1 {
+    font-size: 24px;
+  }
+  body[data-debt-list] .du-summary {
+    padding: 12px 14px;
+    display: block;
+  }
+  body[data-debt-list] .du-money {
+    font-size: 29px;
+  }
+  body[data-debt-list] .du-summary-note {
+    display: none;
+  }
+  body[data-debt-list] .du-tools {
+    grid-template-columns: minmax(0, 1fr) 128px;
+    gap: 8px;
+  }
+  body[data-debt-list] .du-tools > label:first-child {
+    grid-column: 1/-1;
+  }
+  body[data-debt-list] .du-tools > label {
+    font-size: 12px;
+  }
+  body[data-debt-list] .du-status-tools {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+  }
+  body[data-debt-list] .du-tabs {
+    display: none;
+  }
+  body[data-debt-list] .du-mobile-status {
+    display: grid;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--du-muted);
+    min-width: 0;
+  }
+  body[data-debt-list] .du-sort {
+    min-width: 0;
+  }
+  body[data-debt-list] .du-sort select {
+    font-size: 16px;
+  }
+  body[data-debt-list] .du-result-label {
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  body[data-debt-list] .du-result-label h2 {
+    font-size: 16px;
+  }
+  body[data-debt-list] button.du-row {
+    padding: 13px 12px;
+    gap: 10px;
+    min-height: 116px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  body[data-debt-list] .du-row.large {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body[data-debt-list] .du-row-value {
+    font-size: 19px;
+  }
+  body[data-debt-list] .du-row-meta {
+    display: grid;
+    justify-items: start;
+    gap: 5px;
+  }
+  body[data-debt-list] .du-row-owner {
+    font-size: 13px;
+  }
+  body[data-debt-list] .du-pagination {
+    justify-content: center;
+  }
+  body[data-debt-list] .du-dialog {
+    padding: 16px;
+  }
+  body[data-debt-list] .du-dialog h2 {
+    font-size: 20px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body[data-debt-list] .du-item {
+    transition: background-color 0.15s;
+  }
+}
+@media (max-height: 500px) and (min-width: 651px) {
+  body[data-debt-list] .du-topbar {
+    min-height: 44px;
+    padding-block: 0;
+  }
+  body[data-debt-list] .du-main {
+    padding-block: 10px;
+    gap: 10px;
+  }
+  body[data-debt-list] h1 {
+    font-size: 24px;
+  }
+  body[data-debt-list] .du-summary {
+    padding: 8px 14px;
+  }
+  body[data-debt-list] .du-summary > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+  }
+  body[data-debt-list] .du-summary-note {
+    display: none;
+  }
+  body[data-debt-list] .du-summary .du-money {
+    font-size: 26px;
+  }
+  body[data-debt-list] .du-result-label {
+    margin-bottom: 8px;
+  }
+}
+
+body[data-debt-list] {
+  --canvas: #111b29;
+  --surface: #1a2b41;
+  --sidebar: #152335;
+  --ink: #f0f5fc;
+  --muted: #adbed4;
+  --line: #30455e;
+  --brand: #aecfff;
+  --brand-hover: #c7dfff;
+  --button-ink: #12243d;
+  --accent: #294565;
+  --nav-active: #2a4361;
+  --sidebar-text: #adbed4;
+  --rail-width: 178px;
+  background: var(--canvas);
+  color: var(--ink);
+  color-scheme: dark;
+}
+body[data-debt-list] .shell {
+  width: 100%;
+  max-width: 1248px;
+  padding: 0;
+  margin: 0 auto 24px;
+}
+body[data-debt-list] .topbar {
+  min-height: 52px;
+  padding: 6px 24px;
+}
+body[data-debt-list] .topbar .brand {
+  font-size: 18px;
+}
+body[data-debt-list] .brand-icon {
+  display: none;
+}
+body[data-debt-list] .account-menu {
+  gap: 8px;
+  min-width: 0;
+}
+body[data-debt-list] #identity {
+  max-width: min(50vw, 340px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+body[data-debt-list] .du-heading-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+body[data-debt-list] .du-heading-actions a {
+  min-height: 44px;
+  white-space: nowrap;
+  font-size: 14px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+body[data-debt-list] .du-primary {
+  background: var(--du-accent);
+  color: #12243d;
+  border-color: var(--du-accent);
+}
+body[data-debt-list] .du-detail-actions a,
+body[data-debt-list] .du-inline a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 13px;
+  border: 1px solid var(--du-border);
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  flex: 1;
+}
+body[data-debt-list] .du-load-status:empty {
+  display: none;
+}
+body[data-debt-list] .du-load-status {
+  font-size: 13px;
+  color: var(--muted);
+}
+body[data-debt-list] .du-load-status[data-error='true'] {
+  color: #ffc6d0;
+}
+body[data-debt-list] .du-danger {
+  color: #ffc6d0;
+}
+body[data-debt-list] .du-detail-actions .danger-button {
+  font-size: 13px;
+}
+body[data-debt-list] .du-more {
+  min-width: 44px;
+  font-size: 20px;
+}
+body[data-debt-list] .app-mobile-nav {
+  display: none !important;
+}
+@media (max-width: 1000px) {
+  body[data-debt-list] {
+    padding-left: 0;
+    padding-bottom: 0;
+  }
+  body[data-debt-list] .app-rail {
+    display: none;
+  }
+  body[data-debt-list] .du-mobile-menu {
+    display: inline-flex;
+    align-items: center;
+  }
+  body[data-debt-list] .du-trash-link,
+  body[data-debt-list] .du-refresh {
+    display: none;
+  }
+}
+@media (min-width: 1001px) {
+  body[data-debt-list] {
+    padding-left: 178px;
+  }
+  body[data-debt-list] .app-rail:not([hidden]) {
+    display: flex;
+  }
+}
+@media (max-width: 650px) {
+  body[data-debt-list] .topbar {
+    min-height: 48px;
+    padding: 4px 14px;
+  }
+  body[data-debt-list] .du-heading-actions {
+    gap: 6px;
+  }
+  body[data-debt-list] .du-heading-actions a {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+  body[data-debt-list] .footer {
+    padding: 16px 14px;
+  }
+  body[data-debt-list] .du-inline {
+    padding: 0 12px 12px;
+  }
+}

@@ -7,6 +7,7 @@ const controllers = {
   privacy: () => import('../privacy/privacy.js'),
   auth: () => import('../auth/auth.js'),
   debts: () => import('../debts/debts.js'),
+  'debt-list': () => import('../debts/debt-list.js'),
   workspace: () => import('../workspace/workspace.js'),
   'debt-detail': () => import('../debts/debt-detail.js'),
   schedules: () => import('../schedules/schedules.js'),

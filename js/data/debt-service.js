@@ -130,10 +130,18 @@ export function createDebtService(client) {
       if (!Array.isArray(rows)) throw new Error('รูปแบบหมวดหมู่ไม่ถูกต้อง');
       return rows;
     },
-    list: async ({ search = '', category = null, archived = false, cursor = null } = {}) => {
+    list: async ({
+      search = '',
+      category = null,
+      archived = false,
+      cursor = null,
+      limit = 25,
+    } = {}) => {
+      if (!Number.isInteger(limit) || limit < 1 || limit > 100)
+        throw new Error('จำนวนรายการต่อคำขอไม่ถูกต้อง');
       const rows = await checked(
         client.rpc('dm_list_debts', {
-          p_limit: 25,
+          p_limit: limit,
           p_before_created_at: cursor?.created_at ?? null,
           p_before_id: cursor?.id ?? null,
           p_archived: archived,
