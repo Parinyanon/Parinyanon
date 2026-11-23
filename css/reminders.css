@@ -1,0 +1,517 @@
+/* Notification reader: same navy palette as overview/debt list; scoped to this page. */
+body[data-reminders] {
+  --canvas: #111b29;
+  --surface: #1a2b41;
+  --sidebar: #152335;
+  --ink: #f0f5fc;
+  --muted: #adbed4;
+  --line: #30455e;
+  --brand: #aecfff;
+  --brand-hover: #c7dfff;
+  --button-ink: #12243d;
+  --accent: #294565;
+  --nav-active: #2a4361;
+  --sidebar-text: #adbed4;
+  --danger: #ffbec9;
+  --danger-bg: #472c3a;
+  --rail-width: 190px;
+  background: var(--canvas);
+  color: var(--ink);
+  color-scheme: dark;
+}
+body[data-reminders] .shell {
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto 28px;
+  padding: 28px 30px;
+}
+body[data-reminders] .topbar {
+  min-height: 54px;
+  padding: 5px 26px;
+}
+body[data-reminders] .brand-icon {
+  display: none;
+}
+body[data-reminders] #identity {
+  max-width: min(48vw, 340px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+body[data-reminders] .logout-button {
+  color: #ffbec9;
+  background: #472c3a;
+  border-color: #674052;
+}
+body[data-reminders] .app-rail nav a {
+  font-size: 13px;
+  padding-inline: 8px;
+  gap: 8px;
+}
+body[data-reminders] #private-content {
+  display: grid;
+  gap: 23px;
+  min-width: 0;
+}
+body[data-reminders] :is(h1, h2, h3, p) {
+  margin: 0;
+}
+body[data-reminders] h1 {
+  font-size: 30px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+body[data-reminders] h2 {
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+body[data-reminders] .page-heading {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+body[data-reminders] #reminder-total {
+  margin-top: 4px;
+}
+body[data-reminders] .rn-muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+body[data-reminders] #private-content :is(button, .rn-primary, .rn-settings) {
+  font: inherit;
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 9px 13px;
+  color: var(--ink);
+  background: transparent;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+body[data-reminders] #private-content :is(button, a):focus-visible {
+  outline: 3px solid #bad7ff;
+  outline-offset: 3px;
+}
+body[data-reminders] #private-content button:disabled {
+  opacity: 0.45;
+}
+body[data-reminders] #private-content .rn-primary {
+  background: var(--brand);
+  color: #12243d;
+  border-color: var(--brand);
+  font-weight: 500;
+}
+body[data-reminders] .rn-heading-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+body[data-reminders] #private-content .rn-settings {
+  font-size: 13px;
+}
+body[data-reminders] .rn-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 10px;
+  max-width: 760px;
+}
+body[data-reminders] .rn-tools :is(input, select) {
+  font:
+    16px/1.5 'Noto Sans Thai',
+    Tahoma,
+    sans-serif;
+  min-width: 0;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  margin: 0;
+  border: 1px solid #405d7e;
+  border-radius: 9px;
+  background: #17283c;
+  color: var(--ink);
+}
+body[data-reminders] .rn-tools input::placeholder {
+  color: #a8b9cc;
+}
+body[data-reminders] :is(#workspace-status, #reminder-feedback):empty {
+  display: none;
+}
+body[data-reminders] #workspace-status {
+  font-size: 13px;
+  background: transparent;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+body[data-reminders] #reminder-feedback {
+  font-size: 13px;
+  color: #c8e7df;
+}
+body[data-reminders] :is(#workspace-status, #reminder-feedback)[data-error='true'],
+body[data-reminders] .rn-error {
+  color: #ffd2c8;
+  font-size: 13px;
+}
+body[data-reminders] .rn-reader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  gap: 28px;
+  align-items: start;
+}
+body[data-reminders] .rn-list {
+  min-width: 0;
+}
+body[data-reminders] .rn-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  padding-bottom: 8px;
+}
+body[data-reminders] .rn-result-heading h2 {
+  font-size: 14px;
+  font-weight: 400;
+}
+body[data-reminders] .rn-date-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 18px 12px 8px;
+  font-size: 12px;
+  color: #a8bdd6;
+  font-weight: 400;
+}
+body[data-reminders] .rn-date-heading:after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: #273b53;
+}
+body[data-reminders] #private-content button.rn-row {
+  display: grid;
+  grid-template-columns: 6px minmax(0, 1fr) auto;
+  gap: 13px;
+  width: 100%;
+  padding: 18px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+body[data-reminders] #private-content .rn-row:hover {
+  background: #192c42;
+}
+body[data-reminders] #private-content .rn-row[aria-pressed='true'] {
+  background: #203c5b;
+  box-shadow: inset 3px 0 #aecfff;
+  border-radius: 10px;
+  border-bottom-color: transparent;
+}
+body[data-reminders] .rn-row-text {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+body[data-reminders] .rn-row-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+body[data-reminders] .rn-row-text small {
+  font-size: 12px;
+  color: var(--muted);
+}
+body[data-reminders] .rn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+body[data-reminders] .rn-arrow {
+  color: #a3bcd9;
+  font-size: 18px;
+}
+body[data-reminders] .rn-open-cue {
+  display: none;
+  font-size: 12px;
+  color: #b9d6fb;
+}
+body[data-reminders] .rn-desktop-detail {
+  position: sticky;
+  top: 16px;
+  margin-top: 36px;
+  min-width: 0;
+  max-height: calc(100dvh - 32px);
+}
+/* Long content scrolls independently; actions never scroll out of the reader. */
+body[data-reminders] .rn-detail {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid #365171;
+  border-radius: 16px;
+  background: #1a2e47;
+  max-height: calc(100dvh - 32px);
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: inset 0 3px var(--brand);
+}
+body[data-reminders] .rn-detail-scroll {
+  display: grid;
+  gap: 22px;
+  overflow: auto;
+  min-height: 0;
+  scrollbar-gutter: stable;
+  overflow-wrap: anywhere;
+}
+body[data-reminders] .rn-kicker {
+  color: #aecfff;
+  font-size: 12px;
+}
+body[data-reminders] .rn-kicker:before {
+  content: '●';
+  margin-right: 8px;
+  font-size: 9px;
+}
+body[data-reminders] .rn-detail h2 {
+  font-size: 28px;
+  margin-top: 15px;
+  font-weight: 500;
+}
+body[data-reminders] .rn-reason {
+  font-size: 16px;
+  margin-top: 8px;
+}
+body[data-reminders] .rn-date-block {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 13px;
+  align-items: center;
+  border-block: 1px solid #35506e;
+  padding-block: 18px;
+}
+body[data-reminders] .rn-day {
+  font-size: 27px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: #c8dfff;
+  border-right: 1px solid #496582;
+}
+body[data-reminders] .rn-day small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 4px;
+  color: #adc1d9;
+}
+body[data-reminders] .rn-date-block time {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+}
+body[data-reminders] .rn-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+body[data-reminders] #private-content .rn-actions :is(a, button) {
+  min-width: 0;
+  min-height: 48px;
+  font-size: 14px;
+}
+body[data-reminders] .rn-pager {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  color: var(--muted);
+  font-size: 12px;
+}
+body[data-reminders] #private-content .rn-pager button {
+  font-size: 12px;
+  padding-inline: 10px;
+}
+body[data-reminders] .rn-empty {
+  display: grid;
+  gap: 12px;
+  padding-block: 26px;
+  max-width: 600px;
+}
+body[data-reminders] .rn-empty :is(a, button) {
+  justify-self: start;
+}
+body[data-reminders] .rn-dialog {
+  width: min(520px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid #466486;
+  border-radius: 14px;
+  padding: 22px;
+  font:
+    15px/1.65 'Noto Sans Thai',
+    Tahoma,
+    sans-serif;
+}
+body[data-reminders] .rn-dialog[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+body[data-reminders] .rn-dialog::backdrop {
+  background: #07101be0;
+}
+body[data-reminders] .rn-dialog > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+body[data-reminders] .rn-dialog > header h2 {
+  font-size: 16px;
+  color: #bacce3;
+  font-weight: 400;
+}
+body[data-reminders] #reminder-dialog-content {
+  display: grid;
+  min-height: 0;
+}
+body[data-reminders] .rn-dialog .rn-detail {
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  max-height: 100%;
+  gap: 22px;
+}
+body[data-reminders] .rn-dialog .rn-detail h2 {
+  font-size: 25px;
+}
+body[data-reminders] .rn-dialog .rn-actions {
+  padding-top: 12px;
+  border-top: 1px solid #35506e;
+}
+@media (max-width: 850px) {
+  body[data-reminders] .rn-reader {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body[data-reminders] .rn-desktop-detail {
+    display: none;
+  }
+  body[data-reminders] #private-content .rn-row[aria-pressed='true'] {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    border-bottom-color: var(--line);
+  }
+  body[data-reminders] #private-content .rn-row:first-of-type {
+    border-radius: 12px;
+    background: #1d354f;
+    border: 1px solid #365676;
+    padding: 19px 14px;
+  }
+  body[data-reminders] .rn-row:first-of-type .rn-open-cue {
+    display: block;
+    margin-top: 6px;
+  }
+}
+@media (max-width: 650px) {
+  body[data-reminders] .shell {
+    padding: 23px 16px 28px;
+  }
+  body[data-reminders] #private-content {
+    gap: 20px;
+  }
+  body[data-reminders] h1 {
+    font-size: 27px;
+  }
+  body[data-reminders] #private-content .rn-heading-actions .rn-settings {
+    display: none;
+  }
+  body[data-reminders] .rn-tools {
+    grid-template-columns: minmax(0, 1fr) 135px;
+    gap: 8px;
+  }
+  body[data-reminders] .rn-tools :is(input, select) {
+    padding-inline: 10px;
+  }
+  body[data-reminders] .rn-date-heading {
+    padding-top: 16px;
+  }
+}
+@media (max-width: 360px) {
+  body[data-reminders] .rn-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-height: 500px) {
+  body[data-reminders] .shell {
+    padding-top: 8px;
+  }
+  body[data-reminders] #private-content {
+    gap: 8px;
+  }
+  body[data-reminders] .page-heading > div:first-child {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  body[data-reminders] h1 {
+    font-size: 23px;
+  }
+  body[data-reminders] .rn-settings {
+    display: none !important;
+  }
+  body[data-reminders] .rn-date-heading {
+    padding-block: 5px 4px;
+  }
+  body[data-reminders] #private-content .rn-row {
+    padding-block: 11px;
+  }
+  body[data-reminders] #private-content .rn-row:first-of-type {
+    padding-block: 12px;
+  }
+  body[data-reminders] .rn-row:first-of-type .rn-open-cue {
+    display: none;
+  }
+  body[data-reminders] .rn-dialog {
+    padding: 12px 18px;
+  }
+  body[data-reminders] .rn-dialog > header {
+    margin-bottom: 6px;
+  }
+  body[data-reminders] .rn-dialog .rn-detail {
+    gap: 8px;
+  }
+  body[data-reminders] .rn-dialog .rn-detail h2 {
+    font-size: 21px;
+    margin-top: 6px;
+  }
+  body[data-reminders] .rn-detail-scroll {
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-reminders] #private-content .rn-row {
+    transition: none;
+  }
+}

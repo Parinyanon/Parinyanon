@@ -124,6 +124,19 @@ export function createWorkspaceService(client, owner) {
       if (!Array.isArray(rows)) throw new Error('ข้อมูลแจ้งเตือนไม่ถูกต้อง');
       return rows;
     },
+    reminderDebts: async (ids, current = () => true) => {
+      if (!Array.isArray(ids) || ids.some((id) => !UUID.test(id)))
+        throw new Error('รายการหนี้ไม่ถูกต้อง');
+      const result = [];
+      for (let index = 0; index < ids.length && current(); index += 100) {
+        const rows = await checked(
+          owned('debts', 'id,title').in('id', ids.slice(index, index + 100)),
+        );
+        if (!Array.isArray(rows)) throw new Error('อ่านชื่อหนี้ไม่สำเร็จ');
+        result.push(...rows);
+      }
+      return result;
+    },
     markRead: async (id) => {
       if (!UUID.test(id)) throw new Error('รายการไม่ถูกต้อง');
       const row = await checked(

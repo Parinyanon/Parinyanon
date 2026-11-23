@@ -1,5 +1,5 @@
 // เก็บเฉพาะไฟล์หน้าตาแอป ห้าม cache API, Auth, config.local.js หรือข้อมูลผู้ใช้
-const CACHE = 'jadnee-shell-v24';
+const CACHE = 'jadnee-shell-v25';
 const SHELL = [
   './css/app.css',
   './css/base.css',
@@ -10,6 +10,7 @@ const SHELL = [
   './css/trash.css',
   './css/overview.css',
   './css/debt-list.css',
+  './css/reminders.css',
   './js/core/page-boot.js',
   './js/core/recovery.js',
   './assets/app-icon.svg',

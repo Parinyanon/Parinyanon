@@ -1,3 +1,4 @@
+import { createRemindersView } from './reminders.js';
 import { createOverviewView } from './overview.js';
 import { authReady } from '../auth/auth.js';
 import { createWorkspaceService, settingsPayload, csvText } from '../data/workspace-service.js';
@@ -16,14 +17,13 @@ let service,
   busy = false,
   dirty = false,
   epoch = 0,
-  cursor = null,
   pending = null,
   timer,
   day = bangkokToday(),
   emailAvailable = false,
   settingsLoaded = false,
   settingsRevision = 0;
-const visibleIds = new Set();
+
 function status(message, error = false) {
   const node = $('#workspace-status');
   node.textContent = message;
@@ -108,60 +108,15 @@ async function renderOverview(current) {
     () => !stopped && current === epoch,
   );
 }
-async function renderReminders(current, more = false) {
-  const rows = await service.reminders(more ? cursor : null);
-  if (stopped || current !== epoch) return;
-  const list = $('#reminder-list');
-  if (!more) {
-    list.replaceChildren();
-    visibleIds.clear();
-  }
-  for (const row of rows) {
-    if (visibleIds.has(row.id)) continue;
-    visibleIds.add(row.id);
-    const card = element('div', undefined, 'reminder-card'),
-      info = element('div');
-    info.append(
-      element('h3', row.title),
-      element(
-        'p',
-        new Intl.DateTimeFormat('th-TH', {
-          dateStyle: 'medium',
-          timeStyle: 'short',
-          timeZone: 'Asia/Bangkok',
-        }).format(new Date(row.remind_at)),
-      ),
-    );
-    const actions = element('div', undefined, 'mini-actions'),
-      link = element('a', 'ดูหนี้ →', 'plain-button');
-    link.href = debtUrl('debt-detail', row.debt_id);
-    const read = element('button', 'อ่านแล้ว', 'plain-button');
-    read.type = 'button';
-    read.addEventListener('click', async () => {
-      read.disabled = true;
-      try {
-        await service.markRead(row.id);
-        if (stopped) return;
-        card.remove();
-        visibleIds.delete(row.id);
-        refreshReminderBadges(client, owner, () => !stopped);
-        if (!visibleIds.size) await refresh();
-      } catch (error) {
-        if (!stopped) {
-          status(errorMessage(error), true);
-          read.disabled = false;
-        }
-      }
-    });
-    actions.append(link, read);
-    card.append(info, actions);
-    list.append(card);
-  }
-  cursor = rows.at(-1) || null;
-  $('#more-reminders').hidden = rows.length < 25;
-  if (!visibleIds.size)
-    empty(list, 'ไม่มีแจ้งเตือนที่ต้องอ่าน', 'คุณตามรายการครบแล้ว หรือยังไม่มีแผนงวดที่ถึงเวลาเตือน');
-}
+const remindersView =
+  mode === 'reminders'
+    ? createRemindersView(
+        document.getElementById('private-content'),
+        () => refreshReminderBadges(client, owner, () => !stopped),
+        () => refresh(),
+        () => !stopped,
+      )
+    : null;
 async function renderSettings(current) {
   const revision = settingsRevision;
   const [profile, settings, features] = await Promise.all([
@@ -246,7 +201,7 @@ async function refresh() {
   try {
     if (mode === 'overview') await renderOverview(current);
     if (mode === 'reminders') {
-      await renderReminders(current);
+      await remindersView.render(service, () => !stopped && current === epoch);
       refreshReminderBadges(client, owner, () => !stopped && current === epoch);
     }
     if (mode === 'settings') await renderSettings(current);
@@ -256,7 +211,10 @@ async function refresh() {
       controls();
     }
   } catch (error) {
-    if (!stopped && current === epoch) status(errorMessage(error), true);
+    if (!stopped && current === epoch) {
+      status(errorMessage(error), true);
+      remindersView?.fail(errorMessage(error));
+    }
   } finally {
     if (refreshButton && current === epoch) {
       refreshButton.disabled = stopped;
@@ -472,18 +430,6 @@ $('#export-form')?.addEventListener('submit', async (event) => {
     controls();
   }
 });
-$('#more-reminders')?.addEventListener('click', async () => {
-  if (!cursor || busy || stopped) return;
-  const current = epoch;
-  $('#more-reminders').disabled = true;
-  try {
-    await renderReminders(current, true);
-  } catch (error) {
-    if (!stopped) status(errorMessage(error), true);
-  } finally {
-    if (!stopped) $('#more-reminders').disabled = false;
-  }
-});
 $('#workspace-refresh')?.addEventListener('click', () => {
   if (dirty) {
     status('มีข้อมูลที่ยังไม่บันทึก กรุณาบันทึกก่อนโหลดใหม่');
@@ -493,6 +439,7 @@ $('#workspace-refresh')?.addEventListener('click', () => {
 });
 function stop() {
   overviewView?.clear();
+  remindersView?.clear();
   stopped = true;
   if ($('#settings-email')) $('#settings-email').textContent = '';
   epoch++;

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="theme-color" content="#173f3a" />
+    <meta name="theme-color" content="#111b29" />
     <script src="js/core/page-boot.js"></script>
     <title>แจ้งเตือนของคุณ · จัดหนี้</title>
     <link rel="stylesheet" href="css/app.css" />
@@ -17,7 +17,7 @@
       data-controller="workspace"
     ></script>
   </head>
-  <body data-page="dashboard" data-workspace="reminders">
+  <body data-page="dashboard" data-workspace="reminders" data-reminders>
     <header class="topbar">
       <a class="brand" href="overview.html"><span class="brand-icon">฿</span> จัดหนี้</a>
       <div class="account-menu">
@@ -51,41 +51,62 @@
       <div id="message" role="status" aria-live="polite">กำลังตรวจสอบเซสชัน…</div>
       <div id="private-content" hidden>
         <section class="page-heading">
-          <div><h1>แจ้งเตือนของคุณ</h1></div>
-          <button
-            class="icon-button refresh-button"
-            id="workspace-refresh"
-            type="button"
-            aria-label="อัปเดตข้อมูล"
-            title="อัปเดตข้อมูล"
-          >
-            <svg
-              class="ui-icon"
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
+          <div>
+            <h1>แจ้งเตือน</h1>
+            <p id="reminder-total" class="rn-muted">กำลังตรวจรายการล่าสุด…</p>
+          </div>
+          <div class="rn-heading-actions">
+            <a href="settings.html#notifications-heading" class="rn-settings">ตั้งค่าการเตือน</a>
+            <button
+              class="icon-button refresh-button"
+              id="workspace-refresh"
+              type="button"
+              aria-label="อัปเดตข้อมูล"
+              title="อัปเดตข้อมูล"
             >
-              <path d="M20 7v5h-5M4 17v-5h5" />
-              <path d="M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
-            </svg>
-          </button>
+              <svg
+                class="ui-icon"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M20 7v5h-5M4 17v-5h5" />
+                <path d="M6.1 6.1A8 8 0 0 1 19.7 10M4.3 14A8 8 0 0 0 17.9 17.9" />
+              </svg>
+            </button>
+          </div>
         </section>
         <div id="workspace-status" class="notice" role="status" aria-live="polite"></div>
-        <section class="card">
-          <h2>ถึงเวลาจัดการแล้ว</h2>
-          <p class="small">การเตือนจากแผนงวดที่ยังต้องชำระ กดดูหนี้เพื่อจัดการต่อได้เลย</p>
-          <div id="reminder-list"></div>
-          <button id="more-reminders" class="plain-button" type="button" hidden>
-            ดูรายการเก่ากว่า
-          </button>
-        </section>
+        <div id="reminder-tools" class="rn-tools" hidden>
+          <input
+            id="reminder-search"
+            type="search"
+            aria-label="ค้นหาแจ้งเตือน"
+            placeholder="ค้นหาชื่อหนี้"
+            maxlength="150"
+          />
+          <select id="reminder-period" aria-label="ช่วงเวลาแจ้งเตือน">
+            <option value="all">ทุกช่วงเวลา</option>
+            <option value="today">เตือนวันนี้</option>
+            <option value="earlier">ก่อนวันนี้</option>
+          </select>
+        </div>
+        <p id="reminder-feedback" role="status" aria-live="polite"></p>
+        <div id="reminder-results"></div>
+        <dialog id="reminder-reader" class="rn-dialog" aria-labelledby="reminder-reader-label">
+          <header>
+            <h2 id="reminder-reader-label">แจ้งเตือน</h2>
+            <button type="button" data-close-reader>ปิด</button>
+          </header>
+          <div id="reminder-dialog-content"></div>
+        </dialog>
       </div>
     </main>
     <footer class="footer">จัดหนี้ · บันทึกหนี้ส่วนบุคคล</footer>
